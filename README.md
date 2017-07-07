@@ -1,3 +1,4 @@
+## What is KBQ
 
 **KBQ is a tool that helps you to perfom quality analysis on any Knowledge Base(KB) using four quality characteristics that are computed using temporal analysis.**
 
@@ -5,10 +6,9 @@
 - *Modules* It contains four main module: (i) Collect (ii) Analyze (iii) Visualize and (iv) Validate.
 - [*Detail Quality characteristics*](http://softeng.polito.it/rifat/QualityCharacteristics.pdf)
 - *High Level Architecture* 
+![Architecture](https://raw.github.com/rifat963/KBQ-Tool/master/www/architecture2.png)
 
-<img src="architecture2.png" alt="High Level Architecture" style="width: 100%"/>
-
-# Instructions
+## Instructions
 
 The app is hosted on the website: https://dataquality.shinyapps.io/kbq-tool/
 
@@ -29,3 +29,7 @@ You may now run the shiny app with just one command in R:
 ```
 shiny::runGitHub("KBQDashboard", "rifat963")
 ```
+
+#### Licence
+These scripts are free software; you can redistribute it and/or modify it under the terms of the GNU General Public License published by
+the Free Software Foundation, either version 3 of the License, or (at your option) any later version. See the file Documentation/GPL3 in the original distribution for details. There is ABSOLUTELY NO warranty. 
