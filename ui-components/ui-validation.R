@@ -23,8 +23,39 @@ tabPanel("-Validate-",icon = icon("repeat", lib = "glyphicon"),
          # ## =========================================================================== ##
          # ## Tabs for SPARQL Endpoint
          # ## =========================================================================== ##
+         div(class="container",
+             div(class="panel panel-default",""),
+             div(class="panel panel-default", 
+                 div(class="panel-heading","What is property validation ?"),
+                 div(class="panel-body", 
+                     includeMarkdown("md/Analyze_changes.md")
+                 )
+               )
+             ),
          
          div(class="container",
+             column(8,
+                    # Main Panel
+                    div(class="panel panel-default",""),
+                    div(class="panel panel-default", 
+                        div(class="panel-heading","Properties With Completeness Issues")
+                    ),
+                    
+                    div(class="list-group table-of-contents",
+                        DT::dataTableOutput("responses", height = 200) 
+                        
+                    ),tags$hr() 
+                    # div(class="panel panel-default", 
+                    #     div(class="panel-heading","Selected Property")
+                    # ),
+                    # div(class="list-group table-of-contents",
+                    #     DT::dataTableOutput("responses_query", height = 300)
+                    #     
+                    # ),tags$hr() 
+                    
+                    
+             ), # End main panel
+             
              # main div  
              div(class="col-lg-3 col-md-3 col-sm-4",
                  # Side Bar
@@ -41,7 +72,7 @@ tabPanel("-Validate-",icon = icon("repeat", lib = "glyphicon"),
                      shinyjs::disabled(textInput("subjec_object_count", "Total No. of Instances")),
                      textInput("txtIn_eval_subject", "No. of Instances to analyze:",""),
                      tags$hr(),
-                     actionButton("Analyze", "Analyze",icon("bar-chart-o"), 
+                     actionButton("Analyze", "Validate",icon("bar-chart-o"), 
                                   class="btn btn-default btn-sm"),
                      bsTooltip("Analyze", "Extract class Name ",
                                "bottom", options = list(container = "body")) ,  
@@ -52,54 +83,34 @@ tabPanel("-Validate-",icon = icon("repeat", lib = "glyphicon"),
                                   class="btn btn-default btn-sm"),
                      bsTooltip("btnSaveValidation", "Extract class Name ",
                                "bottom", options = list(container = "body"))
-                     ),
-                     div(class="panel panel-default", 
-                           # Side bar header
-                           div(class="panel-heading","Validation")
-                     ),
-                     div(class="list-group table-of-contents",
-                         shinyjs::useShinyjs(),
-                         #input fields
-                         tags$hr(),
-                         shinyjs::disabled(textInput("Subject", "Subject:")),
-                         shinyjs::disabled(textInput("Object", "Object:")),
-                         actionButton("browse_subject", "Explore",class="btn btn-default btn-sm"),
-                         tags$hr(),
-                         radioButtons("feedBack", "Result:",
-                                      c("True Positive (TP) the item presents an issue and an actual
-                                        problem was detected in the KB" = "TP",
-                                        "False Positive (FP) the item presents
-                                        a possible issue but none actual problem is found." = "FP")),
-                         textInput("Comment", "Add Comment:", ""),
-                         #action buttons
-                         actionButton("submit_Comment", "Submit",class="btn btn-default btn-sm"),
-                         # actionButton("Analyze", "Analyze"),
-                         actionButton("Remove_Comment", "Remove",class="btn btn-default btn-sm")
-                         
-                         )
+                     )
+                     # div(class="panel panel-default",
+                     #       # Side bar header
+                     #       div(class="panel-heading","Validation")
+                     # ),
+                     # div(class="list-group table-of-contents",
+                     #     shinyjs::useShinyjs(),
+                     #     #input fields
+                     #     tags$hr(),
+                     #     shinyjs::disabled(textInput("Subject", "Subject:")),
+                     #     shinyjs::disabled(textInput("Object", "Object:")),
+                     #     actionButton("browse_subject", "Explore",class="btn btn-default btn-sm"),
+                     #     tags$hr(),
+                     #     radioButtons("feedBack", "Result:",
+                     #                  c("True Positive (TP) the item presents an issue and an actual
+                     #                    problem was detected in the KB" = "TP",
+                     #                    "False Positive (FP) the item presents
+                     #                    a possible issue but none actual problem is found." = "FP")),
+                     #     textInput("Comment", "Add Comment:", ""),
+                     #     #action buttons
+                     #     actionButton("submit_Comment", "Submit",class="btn btn-default btn-sm"),
+                     #     # actionButton("Analyze", "Analyze"),
+                     #     actionButton("Remove_Comment", "Remove",class="btn btn-default btn-sm")
+                     # 
+                     #     )
                  
-             ), # End side bar
-             column(8,
-                    # Main Panel
-                    div(class="panel panel-default",""),
-                    div(class="panel panel-default", 
-                        div(class="panel-heading","Properties With Completeness Issues")
-                    ),
-                    
-                    div(class="list-group table-of-contents",
-                        DT::dataTableOutput("responses", height = 200) 
-                        
-                    ),tags$hr(), 
-                    div(class="panel panel-default", 
-                        div(class="panel-heading","Selected Property")
-                    ),
-                    div(class="list-group table-of-contents",
-                        DT::dataTableOutput("responses_query", height = 300)
-                        
-                    ),tags$hr() 
-                    
-                    
-             ) # End main panel
+             ) # End side bar
+       
          )# End main
          
 )# End tab panel

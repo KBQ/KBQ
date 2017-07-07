@@ -161,7 +161,10 @@ tabPanel("-Using Indexed KBs Dataset-",icon = icon("th"),
                                  
                                  </div>
                                  "      )
-                                 )
+                                 ),
+                                 actionLink("link_to_tabpanel_validate",HTML("
+                                <h4 class=\"list-group-item-heading\">Validate Quality Issues</h4>"),class="list-group-item")
+                                 
                               )
                              
                            

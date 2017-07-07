@@ -1099,3 +1099,8 @@ output$approvalBox2 <- renderInfoBox({
    }
    
  )
+ 
+ 
+ observeEvent(input$link_to_tabpanel_validate, {
+   updateTabsetPanel(session, "nav-main", "-Validate-")
+ })

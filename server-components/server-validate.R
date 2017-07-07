@@ -1,4 +1,5 @@
 
+
 # Reactive values
 query_data<-reactiveValues(data=NULL)
 
@@ -75,8 +76,11 @@ output$inc<-renderUI({
   dt=input$Subject
   dt=gsub(">", "", dt)
   dt=gsub("<", "", dt)
-  my_test <- tags$iframe(src=dt, height=600, width=533)
-  my_test
+  my_test <- tags$iframe(src=dt, height=500, width=800)
+  if(is.null(dt))
+    return("Quality Profile to extract intances")
+  else
+   my_test
   
 })
 
@@ -89,6 +93,7 @@ observeEvent(input$browse_subject,{
 
 observeEvent(input$Analyze,
              {  
+               showModal(modalAnalyze)
                if(!is.null(upload_data_val$data)){
                  
                  st=upload_data_val$data[upload_data_val$data$Property==input$Property,]
@@ -117,6 +122,7 @@ observeEvent(input$Analyze,
                    # showModal(modal_analyze)
                  }
                }
+               
              }
 )
 
@@ -335,5 +341,75 @@ output$responses <- DT::renderDataTable({
     table_data$DT}
   
 }, server = FALSE, selection = "single"
-
 )
+
+# ## =========================================================================== ##
+# ## Instance model dialog
+# ## =========================================================================== ##
+
+
+modalAnalyze<-modalDialog( title = "Explore Instances",
+                                
+                                fluidPage(
+                                  fluidRow(
+                                    column(8,div(class="list-group table-of-contents",
+                                                 # includeMarkdown("md/persistency.md"),
+                                                 div(class="panel panel-default",
+                                                     # Side bar header
+                                                     div(class="panel-heading","Selected Property Instances ")
+                                                 ),
+                                                 div(class="list-group table-of-contents",
+                                                     # p('Properties With Completeness Issues'),
+                                                     DT::dataTableOutput("responses_query", height = 300)
+                                                    )
+                                               )
+                                           ),
+                                    column(width = 4,
+                                         
+                                           div(class="list-group table-of-contents",
+                                               div(class="panel panel-default",
+                                                   # Side bar header
+                                                   div(class="panel-heading","Validation")
+                                               ),
+                                               shinyjs::useShinyjs(),
+                                               #input fields
+                                               tags$hr(),
+                                               shinyjs::disabled(textInput("Subject", "Subject:")),
+                                               shinyjs::disabled(textInput("Object", "Object:")),
+                                               # actionButton("browse_subject", "Browse Subject",class="btn btn-default btn-sm"),
+                                               tags$hr(),
+                                               radioButtons("feedBack", "Result:",
+                                                            c("True Positive (TP) the item presents an issue and an actual
+                                        problem was detected in the KB" = "TP",
+                                                              "False Positive (FP) the item presents
+                                        a possible issue but none actual problem is found." = "FP")),
+                                               textInput("Comment", "Add Comment:", ""),
+                                               #action buttons
+                                               actionButton("submit_Comment", "Submit",class="btn btn-default btn-sm"),
+                                               # actionButton("Analyze", "Analyze"),
+                                               actionButton("Remove_Comment", "Remove",class="btn btn-default btn-sm")
+                                               
+                                           )      
+
+                                    
+                                     )
+                                  ),
+                                  fluidRow(
+                                    column(8,
+                                       htmlOutput("inc")
+                                    )
+                                  ),
+                                  tags$hr()
+                              
+                                  
+                ),size = "l",easyClose = T
+            )
+
+
+# observeEvent(input$Analyze,{
+#   
+#   htmlOutput("inc")
+#   
+# })
+
+

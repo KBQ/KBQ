@@ -82,7 +82,7 @@ tagList(
                a("ISMB ",href="http://www.ismb.it"),", and",
                a("Ontology Engineering Group",href="http://oeg-upm.net/"),align="center",width=4),
              p(("Copyright (C) 2017, code licensed under GPLv3"),align="center",width=4),
-             p(("Code available on Github:"),a("",href=""),align="center",width=4)
+             p(("Code available on Github:"),a("KBQ-Tool",href="https://github.com/rifat963/KBQ-Tool"),align="center",width=4)
              # p(a("",href=""),align="center",width=4)
     )
     

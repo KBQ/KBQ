@@ -12,8 +12,6 @@
 
 The app is hosted on the website: https://dataquality.shinyapps.io/kbq-tool/
 
-Code can be found on github: https://github.com/rifat963/KBQDashboard
-
 To run this app locally on your machine, download R or RStudio and run the following commands once to set up the environment:
 
 ```
