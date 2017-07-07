@@ -1,0 +1,1 @@
+Persistency  measures provides an indication of the adherence of a knowledgebase to such continuous growth assumption. Using this quality measure, data curators can identify the classes for which the assumption is not verified.

@@ -1,0 +1,1 @@
+Temporal-based  completeness  focuses  on  the  re-moval  of  information  as  a  negative  effect  of  the  KBevolution.  It  is  based  on  the  continuous  growth  assumption as well; as a consequence we expect properties  of  subjects  should  not  be  removed  as  the  KB evolves.

@@ -1,0 +1,1 @@
+We used [Loupe](http://loupe.linkeddata.es/loupe/) to extracted KB summary datasets. We used following endpoint and set of defined sparql queries to extract all KB versions. Based on the KB versions we extracted summary statistics of a specific class.
