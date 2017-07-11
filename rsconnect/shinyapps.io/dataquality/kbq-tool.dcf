@@ -3,8 +3,8 @@ title: KBQ-Tool
 account: dataquality
 server: shinyapps.io
 appId: 193643
-bundleId: 895323
+bundleId: 899719
 url: https://dataquality.shinyapps.io/kbq-tool/
-when: 1499423553.18726
+when: 1499785875.83031
 asMultiple: FALSE
 asStatic: FALSE

@@ -18,10 +18,16 @@
 # You may contact the author of this code, Rifat Rashid, at <mohammad.rashid@polito.it>
 ## ==================================================================================== ##
 
+# Api Model Update Status
+apiStatisCreateRfile<- reactiveValues(data = NULL)
+apiStatisCreateCornJobs<- reactiveValues(data = NULL)
+apiStatisNoOfCornJobs<- reactiveValues(data = NULL)
 
 # For execution Updates
 
 sdeUp<- reactiveValues(data = NULL)
+
+scheduleName<- reactiveValues(data = NULL)
 
 # For execution TIme
 
@@ -260,3 +266,370 @@ output$downloadData<-downloadHandler(
   }
   
 )
+
+## ==================================================================================== ##
+## Build an Scheduler
+## ==================================================================================== ##              
+
+
+createScheduler<-eventReactive(input$btnBuildScheduler, {
+  
+  filename=input$txtSchedulerName
+
+  parm<-paste("http://178.62.126.59:8500/readSchedulerIndex",sep = "")
+  r<-GET(parm)
+  sd<-content(r)
+  DF<-fromJSON(sd[[1]])
+  print(DF)
+  
+  
+  if(filename %in% DF$filename){
+    apiStatisCreateRfile$data="Scheduler Already exist-"
+    apiStatisCreateCornJobs$data="Please Change Scheduler Name"
+    paste(apiStatisCreateRfile$data,"-",apiStatisCreateCornJobs$data,sep=" ")
+  }else{
+    
+  # showModal(dataModal())
+    filename=input$txtSchedulerName
+    
+    endpoint<-input$txtEndpoint_snapshots
+    
+    className<-input$SelIClassData_snapshots
+    if(is.null(className)){
+      apiStatisCreateRfile$data="Class Name-"
+      apiStatisCreateCornJobs$data="Please Select a class Name by pressing ClassName"
+      paste(apiStatisCreateRfile$data,"-",apiStatisCreateCornJobs$data,sep=" ")
+    }else{
+    
+    className<-gsub("#", "%23", className)
+    
+    # graph<-input$SelIGraphData_snapshots
+    if(is.null(input$SelIGraphData_snapshots))
+      graph="NoGraph"
+    else{
+    graph=input$SelIGraphData_snapshots
+    graph<-gsub("#", "%23", graph)
+    }
+    freq<-input$radioScheduler
+    time<-as.character(strftime(input$txtScheduleAt,"%T"))
+    
+    parm<-paste("http://178.62.126.59:8500/","createRfile?filename=",filename,"&className=",
+                className,"&endpoint=",endpoint,"&graph=",graph,sep = "")
+    
+    responseCreateRfile<-GET(parm)
+    resCreateRfileContent<-content(responseCreateRfile)
+    
+    #Api Corn Jobs
+    
+    parmCreateCornJob<-paste("http://178.62.126.59:8500/","createCornJob?filename=",filename,"&freq=",
+                             freq,"&time=",time,sep = "")
+    print(parmCreateCornJob)
+    rCreateCornJob<-GET(parmCreateCornJob)
+    
+    rCreateCornJobContent<-content(rCreateCornJob)
+    print("-----------------")
+    print(rCreateCornJobContent[[1]])
+    
+    if (resCreateRfileContent[[1]]=="success" && rCreateCornJobContent[[1]]=="success") {
+      
+      parmAddSchedule<-paste("http://178.62.126.59:8500/","addSchedulerIndex?schedulerName=",filename,sep = "")
+      
+      parmGetAddSchedule<-GET(parmAddSchedule)
+      
+      parmGetAddScheduleContent<-content(parmGetAddSchedule)  
+      print("#####")
+      print(parmGetAddScheduleContent)
+      apiStatisCreateRfile$data="R script updated"
+      apiStatisCreateCornJobs$data="Scheduler Started in the Server"
+      # removeModal()
+      scheduleName$data<-getSchedulerNames()
+      scheduleNameVis$data<-scheduleName$data
+      paste(apiStatisCreateRfile$data,"-",apiStatisCreateCornJobs$data,sep=" ")
+    } else {
+      # div(tags$b("Server Error: Fail to Connect to Api server due to proxy settings.", style = "color: red;")),
+      
+       apiStatisCreateRfile$data="Server Error-"
+       apiStatisCreateCornJobs$data="Fail to Connect to Api server. Please check your proxy settings"
+       paste(apiStatisCreateRfile$data,"-",apiStatisCreateCornJobs$data,sep=" ")
+      # showModal(dataModal(failed = TRUE))
+    }
+   }
+  }
+})
+
+
+
+output$uiSelInSchedulerName <-renderUI({
+  transData<-scheduleName$data
+  if(is.null(transData)){
+    # h5("Press Summary Data to load Classess", '...', heigth=200, width=200)
+    selectInput("SelInSchedulerName","Current Schedulers", NULL, selected = NULL, selectize = FALSE, multiple = TRUE)
+    
+    # showModal(proxyError)
+  }
+  
+  else{
+    selectInput("SelInSchedulerName","Current Schedulers", transData, selected = NULL, selectize = FALSE, multiple = TRUE)
+  }
+  
+})
+
+observe({
+   scheduleName$data<-getSchedulerNames()
+})
+
+getSchedulerNames<-function(){
+  
+  parm<-paste("http://178.62.126.59:8500/readSchedulerIndex",sep = "")
+  
+  r<-tryCatch(GET(parm), error = function(e) return(NULL))
+  # status_code(r)
+  if(!is.null(r)){
+  sd<-content(r)
+  DF<-fromJSON(sd[[1]])
+  DF$filename
+  }else{
+    
+    return(NULL)
+    
+    }
+}
+
+proxyError<-modalDialog(title = "Connection Error",
+   fluidPage(
+     fluidRow(
+       tags$p("Connection Error: Please Check Your proxy Settings.")
+       
+     )
+     
+   )
+  
+)
+
+dataModal <- function(failed = FALSE) {
+  modalDialog(title = "Confirm Schdeduler",
+    
+  if (failed)
+     div(tags$b("Server Error: Fail to Connect to Api server due to proxy settings.", style = "color: red;")),
+              
+              
+    tags$div(class="row", id="",
+        tags$div(class="col-lg-3 col-md-3 col-sm-3",
+                 tags$span(class = "label label-default","Graph:")
+                ),
+        tags$div(class="col-lg-6 col-md-6 col-sm-6",
+                      div(class="list-group table-of-contents",
+                          textOutput("ShowModelGraph")
+                      )
+                )
+      
+    ),          
+    tags$div(class="row", id="",
+    tags$div(class="col-lg-3 col-md-3 col-sm-3",
+             tags$span(class = "label label-default","Class Name:")
+    ),
+    tags$div(class="col-lg-6 col-md-6 col-sm-6",
+             div(class="list-group table-of-contents",
+                 textOutput("ShowModelClassName")
+             )
+    ) ), 
+    tags$div(class="row", id="",
+             tags$div(class="col-lg-3 col-md-3 col-sm-3",
+                      tags$span(class = "label label-default","Scheduler Name:")
+             ),
+             tags$div(class="col-lg-6 col-md-6 col-sm-6",
+                      div(class="list-group table-of-contents",
+                          textOutput("ShowModelSchedulerName")
+                      )
+             ) 
+    ),
+   
+    tags$div(class="row", id="",
+             tags$div(class="col-lg-3 col-md-3 col-sm-3",
+                      tags$span(class = "label label-default","Schedule:")
+             ),
+             tags$div(class="col-lg-6 col-md-6 col-sm-6",
+                      div(class="list-group table-of-contents",
+                          textOutput("ShowModelSchedule")
+                      )
+             ) 
+    ),
+ 
+
+    
+    footer = tagList(
+      actionButton("ScheduleModelOk", "Confirm"),
+      modalButton("Cancel")
+      
+    )
+  )
+}
+
+
+output$ShowModelGraph<-renderText({
+  input$SelIGraphData_snapshots
+})
+
+output$ShowModelClassName<-renderText({
+  input$SelIClassData_snapshots
+})
+
+
+output$ShowModelSchedulerName<-renderText({
+  input$txtSchedulerName
+  
+})
+
+
+output$ShowModelSchedule<-renderText({
+  
+   
+  if(input$radioScheduler=="minutely")
+  st<-paste("Schedule:","Every minute","starting from",strftime(input$txtScheduleAt, "%T"),sep=" ")
+  if(input$radioScheduler=="hourly")
+  st<-paste("Schedule:","Every hour","starting from",strftime(input$txtScheduleAt, "%T"),sep=" ")
+  if(input$radioScheduler=="daily")
+  st<-paste("Schedule:",input$radioScheduler,"at:",strftime(input$txtScheduleAt, "%T"),sep=" ")
+  
+  st
+  
+  
+})
+
+output$textSchedulerUpdates<-renderText({
+  paste(createScheduler())
+  # paste(apiStatisCreateRfile$data,"-",apiStatisCreateCornJobs$data,sep=" ")
+})
+
+
+observeEvent(input$ScheduleModelOk, {
+  
+  filename=input$txtSchedulerName
+  
+  endpoint<-input$txtEndpoint_snapshots
+  
+   className<-input$SelIClassData_snapshots
+   className<-gsub("#", "%23", className)
+  
+  graph<-input$SelIGraphData_snapshots
+  graph<-gsub("#", "%23", graph)
+  freq<-input$radioScheduler
+  time<-input$txtScheduleAt
+  
+  parm<-paste("http://178.62.126.59:8500/","createRfile?filename=",filename,"&className=",
+               className,"&endpoint=",endpoint,"&graph=",graph,sep = "")
+  
+  responseCreateRfile<-GET(parm)
+  resCreateRfileContent<-content(responseCreateRfile)
+  
+  #Api Corn Jobs
+
+  parmCreateCornJob<-paste("http://178.62.126.59:8500/","createCornJob?filename=",filename,"&freq=",
+               freq,"&time=",time,sep = "")
+   
+  rCreateCornJob<-GET(parmCreateCornJob)
+  
+  rCreateCornJobContent<-content(rCreateCornJob)
+  print("-----------------")
+  print(rCreateCornJobContent[[1]])
+  
+  filename="scheduler_name1"
+  parmAddSchedule<-paste("http://178.62.126.59:8500/","addSchedulerIndex?schedulerName=",filename,sep = "")
+ 
+  parmGetAddSchedule<-GET(parmAddSchedule)
+  
+  parmGetAddScheduleContent<-content(parmGetAddSchedule)  
+  print("#####")
+  print(parmGetAddScheduleContent)
+  
+  
+  if (resCreateRfileContent[[1]]=="success" && rCreateCornJobContent[[1]]=="success") {
+    # apiStatisCreateRfile$data="R script updated"
+    # apiStatisCreateCornJobs$data="Scheduler Started in the Server"
+    removeModal()
+    
+  } else {
+    # div(tags$b("Server Error: Fail to Connect to Api server due to proxy settings.", style = "color: red;")),
+    
+    # apiStatisCreateRfile$data="Server Error-"
+    # apiStatisCreateCornJobs$data="Fail to Connect to Api server due to proxy settings"
+    
+    # showModal(dataModal(failed = TRUE))
+  }
+})
+
+# observe({
+#   x<- input$radioScheduler
+#   
+#   if(x=="minutely"){
+#     disable(input$txtScheduleAt)
+#   }
+#   if(x=="hourly"){
+#     disable(input$txtScheduleAt)
+#   }
+#   if(x=="daily"){
+#     enable(input$txtScheduleAt)
+#   }
+#   
+# })
+
+
+
+schedulerDataModelUpdates<-modalDialog(title = "KB growth results",
+                               fluidPage(
+                                 fluidRow(
+                                   column(8,div(class="list-group table-of-contents",
+                                                includeMarkdown("md/kbgrowth.md"),
+                                                p('KB growth measures plot (entity count vs no. days)'),
+                                                uiOutput("plot_kb_growth")
+                                   )
+                                   ),
+                                   infoBoxOutput("kbgrowthSummaryBoxModel"),
+                                   column(width = 4,
+                                          HTML(
+                                            "<div class=\"list-group table-of-contents\">
+                                            <p class = \"label label-default\">KB growth::</p>
+                                            <p>The value is 1 if the normalized distance between actual value is higher than predicted value of a class, otherwise it is 0.</p> 
+                                            <p class = \"label label-default\"> Interpretation:</p> 
+                  <p>In particular, if the KB growth measure has value of 1 then the KB may have unexpected growth with unwanted entities otherwise KB remains stable.</p>
+                  </div>
+                  ")
+                                   )
+                                 ),
+                                 fluidRow(
+                                   # tags$br(),
+                                   
+                                   tags$hr(),
+                                   HTML("<h4 class=\"list-group-item-heading\">Explore Various KB releases</h4>"),
+                                   tags$hr(),
+                                   column(4,
+                                          
+                                          uiOutput("selectKbReleasesKbModel"),
+                                          p('Select two Releases',class="text-info")
+                                   ),
+                                   column(8,
+                                          p('KB growth measures plot (entity count vs no.of days)'),
+                                          uiOutput("KbReleasesGrowthSubSetPlot")    
+                                   )
+                                 )
+                                 
+                               ),size = "l",easyClose = T
+)
+
+
+
+
+observeEvent(input$btnViewScheduler, {
+  updateTabsetPanel(session, "nav-main", "-Using Scheduler-")
+})
+
+
+
+
+
+
+
+
+
+
+

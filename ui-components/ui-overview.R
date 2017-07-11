@@ -21,34 +21,34 @@
 tabPanel("-Getting Started-",icon = icon("equalizer", lib = "glyphicon"),
         
          div(class="container",
-           div(class="col-lg-3 col-md-3 col-sm-4",
-              # tags$hr(),
-              div(class="panel panel-default",""),
-              div(class="panel panel-default", 
-                  # Side bar header
-                  div(class="panel-heading","Getting started with KBQ")
-              ),
-              
-              div(class="list-group table-of-contents",
-                  a("Collect", class="list-group-item", href="#collect"),
-                  # actionLink("link_to_tabpanel_collect","Collect-{Extract KB data}",class="list-group-item"),
-                  a("Analyze", class="list-group-item", href="#analyze"),
-                  # actionLink("link_to_tabpanel_analyze", "Analyze-{Quality Profiling}",class="list-group-item"),
-                  a("Visualize", class="list-group-item", href="#visualize"),
-                  # actionLink("link_to_tabpanel_visualize", "Visualize-{Visualize KB evolution}",class="list-group-item"),
-                  a("Validate", class="list-group-item", href="#validate"),
-                  
-                  # actionLink("link_to_tabpanel_validate", "Validate-{Validate Quality Issues}",class="list-group-item"),
-                  
-                  actionLink("link_to_tabpanel_Instruction", "Instructions",class="list-group-item"),
-                  actionLink("link_to_tabpanel_about", "About",class="list-group-item")
-                  # a("KBQ", class="list-group-item", href="#KBQ")
-                  
-                  ), 
-                tags$hr()
-              
-           ),#column
-            column(8,
+           # div(class="col-lg-3 col-md-3 col-sm-4",
+           #    # tags$hr(),
+           #    div(class="panel panel-default",""),
+           #    div(class="panel panel-default", 
+           #        # Side bar header
+           #        div(class="panel-heading","Getting started with KBQ")
+           #    ),
+           #    
+           #    div(class="list-group table-of-contents",
+           #        a("Collect", class="list-group-item", href="#collect"),
+           #        # actionLink("link_to_tabpanel_collect","Collect-{Extract KB data}",class="list-group-item"),
+           #        a("Analyze", class="list-group-item", href="#analyze"),
+           #        # actionLink("link_to_tabpanel_analyze", "Analyze-{Quality Profiling}",class="list-group-item"),
+           #        a("Visualize", class="list-group-item", href="#visualize"),
+           #        # actionLink("link_to_tabpanel_visualize", "Visualize-{Visualize KB evolution}",class="list-group-item"),
+           #        a("Validate", class="list-group-item", href="#validate"),
+           #        
+           #        # actionLink("link_to_tabpanel_validate", "Validate-{Validate Quality Issues}",class="list-group-item"),
+           #        
+           #        actionLink("link_to_tabpanel_Instruction", "Instructions",class="list-group-item"),
+           #        actionLink("link_to_tabpanel_about", "About",class="list-group-item")
+           #        # a("KBQ", class="list-group-item", href="#KBQ")
+           #        
+           #        ), 
+           #      tags$hr()
+           #    
+           # ),#column
+            # column(8,
                    div(class="panel panel-default",""),
                    div(class="panel panel-default", 
                        div(class="panel-heading","What is KBQ ?"),
@@ -88,7 +88,7 @@ tabPanel("-Getting Started-",icon = icon("equalizer", lib = "glyphicon"),
                    # )
                   
                    
-              )
+              # )
          )
          
   )

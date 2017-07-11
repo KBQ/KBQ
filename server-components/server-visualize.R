@@ -1,6 +1,10 @@
 # For indexed Query
 InR<- reactiveValues(data = NULL)
 
+scheduleNameVis<- reactiveValues(data = NULL)
+
+scheduleData<-reactiveValues(data=NULL)
+
 # For indexed Query
 InC<- reactiveValues(data = NULL)
 
@@ -148,3 +152,64 @@ output$indexGrowthPlot<-renderPlot({
 #     ggplotly(p)   
 #   }
 # })
+
+
+## ==================================================================================== ##
+## Visualize the scheduler
+## ==================================================================================== ##              
+
+output$uiSelInSchedulerNameVis <-renderUI({
+  transData<-scheduleNameVis$data
+  if(is.null(transData)){
+    # h5("Press Summary Data to load Classess", '...', heigth=200, width=200)
+    selectInput("SelInSchedulerNameVis","Current Schedulers", NULL, selected = NULL, selectize = FALSE, multiple = TRUE)
+    
+    # showModal(proxyError)
+  }
+  
+  else{
+    selectInput("SelInSchedulerNameVis","Current Schedulers", transData, selected = NULL, selectize = FALSE, multiple = TRUE)
+  }
+  
+})
+
+observe({
+  scheduleNameVis$data<-getSchedulerNamesVis()
+})
+
+getSchedulerNamesVis<-function(){
+  
+  parm<-paste("http://178.62.126.59:8500/readSchedulerIndex",sep = "")
+  
+  r<-tryCatch(GET(parm), error = function(e) return(NULL))
+  # status_code(r)
+  if(!is.null(r)){
+    sd<-content(r)
+    DF<-fromJSON(sd[[1]])
+    DF$filename
+  }else{
+    
+    return(NULL)
+    
+  }
+}
+
+
+observeEvent(input$btnSchedulerViewData,{
+  
+  scheduleName<-input$SelInSchedulerNameVis
+    
+  parm<-paste("http://178.62.126.59:8500/","readCSV?filename=",scheduleName,".csv",sep = "")
+  
+  r<-GET(parm)
+
+  dt<-content(r)
+  print(class(dt[[1]]))
+  scheduleData$data <- fromJSON(dt[[1]]) 
+  print(scheduleData$data)
+  
+})
+
+
+
+

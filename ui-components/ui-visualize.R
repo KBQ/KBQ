@@ -17,8 +17,63 @@
 # 
 # You may contact the author of this code, Rifat Rashid, at <mohammad.rashid@polito.it>
 ## ==================================================================================== ##
+navbarMenu("-Visualize-",icon = icon("signal", lib = "glyphicon"),
+           
+  tabPanel("-Using Scheduler-",icon = icon("th"),
+       div(class="container",
+                # main div  
+                        div(class="col-lg-3 col-md-3 col-sm-4",
+                    # Side Bar
+                            div(class="panel panel-default",""),# top line
+                            div(class="panel panel-default", 
+                                # Side bar header
+                                div(class="panel-heading","Scheduler List")
+                            ),
+                            
+                            div(class="list-group table-of-contents",
+                                
+                                uiOutput("uiSelInSchedulerNameVis"),
+                                actionButton("btnSchedulerViewData", "Visualize",icon("bar-chart-o"),
+                                             class="btn btn-default btn-sm"),
+                                bsTooltip("btnSchedulerViewData", "Extract class Name ",
+                                          "bottom", options = list(container = "body"))
+                            ),tags$hr()  
+                            
+                        ), # End side bar
+                        column(8,
+                               # Main Panel
+                               div(class="panel panel-default",""),
+                               div(class="panel panel-default", 
+                                   div(class="panel-heading","Visualize Scheduled datasets")
+                               ),
+                               div(class="list-group table-of-contents",
+                                   uiOutput("Schedule_classs_name_last")   
+                               ),tags$hr(),
+                               column(6,
+                                      uiOutput("Schedule_graph_changes")),
+                               column(6,
+                                      uiOutput("Schedule_graph_growth"))
+                               # div(class="row", id="",
+                               #     div(class="col-lg-4 col-md-4 col-sm-4",
+                               #         div(class="list-group table-of-contents",
+                               #             
+                               #         )
+                               #     ),
+                               #     div(class="col-lg-4 col-md-4 col-sm-4",
+                               #         div(class="list-group table-of-contents",
+                               #             
+                               # 
+                               #         )
+                               #     )
+                               # )    
+                        ) # End main panel
+                    )# End main
+                    
+           ),# End tab panel           
+           
+           
 
-tabPanel("-Visualize-",icon = icon("signal", lib = "glyphicon"),
+tabPanel("-Using Indexed KBs-",icon = icon("th"),
          
          # ## =========================================================================== ##
          # ## Tabs for SPARQL Endpoint
@@ -77,3 +132,4 @@ tabPanel("-Visualize-",icon = icon("signal", lib = "glyphicon"),
          )# End main
          
 )# End tab panel
+)#Nav bar

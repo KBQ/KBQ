@@ -40,6 +40,8 @@ library(shinyBS)
 library(shinydashboard)
 library(shinythemes)
 library("htmltools")
+library(httr)
+library(shinyTime)
 
 source("DQ/measure.R")
 source("DQ/CRUD.R")
