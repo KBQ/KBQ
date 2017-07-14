@@ -34,9 +34,8 @@ navbarMenu("-Visualize-",icon = icon("signal", lib = "glyphicon"),
                                 
                                 uiOutput("uiSelInSchedulerNameVis"),
                                 actionButton("btnSchedulerViewData", "Visualize",icon("bar-chart-o"),
-                                             class="btn btn-default btn-sm"),
-                                bsTooltip("btnSchedulerViewData", "Extract class Name ",
-                                          "bottom", options = list(container = "body"))
+                                             class="btn btn-default btn-sm")
+                              
                             ),tags$hr()  
                             
                         ), # End side bar

@@ -68,7 +68,7 @@ tagList(
     source("ui-components/ui-analyze2.R",local=TRUE)$value,
     source("ui-components/ui-visualize.R",local=TRUE)$value,
     source("ui-components/ui-validation.R",local=TRUE)$value,
-    source("ui-components/ui-sparql.R",local=TRUE)$value,
+    # source("ui-components/ui-sparql.R",local=TRUE)$value,
     source("ui-components/ui-instruction.R",local=TRUE)$value,
     source("ui-components/ui-about.R",local=TRUE)$value,
     

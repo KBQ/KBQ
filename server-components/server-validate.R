@@ -410,9 +410,12 @@ modalAnalyze<-modalDialog( title = "Explore Instances",
                                        htmlOutput("inc")
                                     ),
                                     column(3,
+                                      div(class="list-group",     
                                       tags$p("Explore instances to detect if the subject missing in the current version."),
-                                      tags$p("For example:")
-                                      
+                                      tags$p("For example: in case of subject http://dbpedia.org/resource/Hotel_Castelar we can look at rdf:type if there are
+                                             any inconsistency present in the ontlogy maping."),
+                                      tags$p("Furthermore through foaf:primaryTopic it possible to look at the sources to validate completeness.")
+                                      )
                                     )       
                                   )
                               

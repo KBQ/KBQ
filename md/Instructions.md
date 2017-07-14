@@ -10,11 +10,11 @@ output:
 - *Modules* It contains four main module: (i) Collect (ii) Analyze (iii) Visualize and (iv) Validate.
 - [*Detail Quality characteristics*](http://softeng.polito.it/rifat/QualityCharacteristics.pdf)
 
-# Instructions
+## Instructions
 
-The app is hosted on the website: https://dataquality.shinyapps.io/kbq-tool/
+The app is hosted on the website: http://datascience.polito.it/shiny/KBQ-Tool/
 
-Code can be found on github: https://github.com/rifat963/KBQDashboard
+Code can be found on github: https://github.com/rifat963/KBQ-Tool
 
 To run this app locally on your machine, download R or RStudio and run the following commands once to set up the environment:
 
@@ -23,58 +23,107 @@ install.packages(c("ggplot2", "dplyr", "plyr",
 "dtplyr", "plotly","SPARQL",
 "rmarkdown","DT","readr","data.table",
 "shinyjs","shiny","shinydashboard",
-"shinythemes","stringr","jsonlite","gtools","htmltools"))
+"shinythemes","stringr","jsonlite","gtools",
+"htmltools","httr","shinyTime","shinyBS"))
 
 ```
 You may now run the shiny app with just one command in R:
 
 ```
-shiny::runGitHub("KBQDashboard", "rifat963")
+shiny::runGitHub("KBQ-Tool", "rifat963")
 ```
 
-<a name="inputdata"></a> 
+### Collect
 
-## Input Data 
+KBQ based on class based analysis for any KBs using SPARQLs. Data extraction is performed based on specific set of sparql queries to extract summary statistics. 
 
 You may use this app by
 
 1. Exploring the Indexed KBs.
-2. Collect Snapshots data using scheduler or by
+2. Collect class specific Snapshots data by using scheduler or save class summary data manually.
+3. All the input datasets saved in a .CSV *comma-separated-value* file.
+4. File must have a header row. Each CSV contains following headers.
 
-<a name="dataformat"></a> 
+<style type="text/css">
+.tg  {border-collapse:collapse;border-spacing:0;}
+.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
+.tg .tg-yw4l{vertical-align:top}
+</style>
+<table class="tg">
+  <tr>
+    <th class="tg-031e">Header</th>
+    <th class="tg-031e">Description</th>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">p</td>
+    <td class="tg-yw4l">Property name for a specific class</td>
+  </tr>
+  <tr>
+    <td class="tg-031e">freq</td>
+    <td class="tg-031e">Count of a property</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Release</td>
+    <td class="tg-yw4l">Release information in date</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">className</td>
+    <td class="tg-yw4l">Name of the selected class for quality profiling</td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">Graph</td>
+    <td class="tg-yw4l">Name of the graph </td>
+  </tr>
+  <tr>
+    <td class="tg-yw4l">count</td>
+    <td class="tg-yw4l">Entity count of the class</td>
+  </tr>
+</table>
 
-### Data Format 
 
-- Must be a .CSV *comma-separated-value* file (you may export from Excel).
-- File must have a header row.
+For periodic data extraction we have created a set of REST API. We use this API to create scheduler in the hosting server based on the selected class. Details API documentation presented in the github: https://github.com/rifat963/KbDataObservetory
+
+### Analyze
+
+Purpose of KBQ is to automatic analysis of quality profiling of any KB using sparql endpoint. Profiling is based on the four quality characteristics. Following are the steps used to performed quality profiling.
+
+- For indexed KBs: Select a class by using **ClassName**. Then start quality profiling simple click ** Quality Profiling**. Results can be visualize after computing data finished.
+
+- For sanapshots dataset: Select a scheduler from the lisit and press **Visualize**. 
+
+### Visualize
+
+Visualization is performed using two seperate stage.
+
+- Overview of quality profiling results: In the visualize section an summary of the quality profiling results present together with a link to details quality report. 
+
+- Quality profiling specific visualization: Based on the quality characteriscs measure results a set of indicators is used to notify the end users for quality profiling results.
 
 
+### Validate
 
-#### Analyzed Data
+- List of quality properties with completeness issues presented in the validation module. 
+
+- For validation user need to select a properties followed by extract instances of that property.
+
+- By selecting each instance user can explore subject and sources. If the instance is present in the KB however it is missing in the sources there is a completeness issue present for the instance.
 
 <a name="rdata"></a> 
 
 <a name="vis"></a> 
-
-# Visualizations
-
 
 <a name="pcaplots"></a>
 
 
 <a name="analysisplots"></a>
 
-## Validate
 
 
-<a name="volcano"></a>
  
 
-<a name="scatterplots"></a>
 
  
-<a name="boxplots"></a>
 
 
-<a name="heatmaps"></a>
 

@@ -31,12 +31,12 @@ tabPanel("-Using Indexed KBs Dataset-",icon = icon("th"),
              div(class="col-lg-3 col-md-3 col-sm-4",
                  # Side Bar
                  div(class="panel panel-default",""),# top line
-                 div(class="panel panel-default", 
-                     # Side bar header
-                     div(class="panel-heading","Using Indexed KBs Dataset")
-                 ),
                  
                  div(class="list-group table-of-contents",
+                     div(class="panel panel-default", 
+                         # Side bar header
+                         div(class="panel-heading","Using Indexed KBs Dataset")
+                     ),
                      textInput("txtEndpoint", "SPARQL Endpoint:", "http://patents.linkeddata.es/sparql",width = 300),
                      bsTooltip("txtEndpoint", "Metadata sparql endpoint from loupe",
                                "bottom", options = list(container = "body")),
@@ -46,20 +46,20 @@ tabPanel("-Using Indexed KBs Dataset-",icon = icon("th"),
                                   c("Spanish DBpedia" = "<http://data.loupe.linked.es/dbpedia/es>",
                                     "Aragon" = "<http://opendata.aragon.es/informes/>")),
                      
-                     
-                     uiOutput("selIReleases"), 
+                     tags$hr(),
+                     # uiOutput("selIReleases"), 
                      uiOutput("selIClassName"), 
                      
-                     actionButton("btnQuery", "KB Releases",icon("paper-plane"), 
-                                  class="btn btn-default btn-sm"),
-                     bsTooltip("btnQuery", "Get All the KB Releases",
-                               "bottom", options = list(container = "body")),
+                     # actionButton("btnQuery", "KB Releases",icon("paper-plane"), 
+                     #              class="btn btn-default btn-sm"),
+                     # bsTooltip("btnQuery", "Get All the KB Releases",
+                     #           "bottom", options = list(container = "body")),
                      actionButton("btnSelectClass", "Class Name",icon("paper-plane"), 
                                   class="btn btn-default btn-sm"),
-                     bsTooltip("btnSelectClass", "Get all Class Name",
-                               "bottom", options = list(container = "body")),
+                     # bsTooltip("btnSelectClass", "Get all Class Name",
+                     #           "bottom", options = list(container = "body")),
                      
-                     tags$hr(),
+                    
                      actionButton("btnMeasure", "Quality Profile",icon("bar-chart-o"), 
                                   class="btn btn-default btn-sm"),
                      # bsTooltip("btnMeasure", "Quality profiling using class Name",
@@ -82,10 +82,11 @@ tabPanel("-Using Indexed KBs Dataset-",icon = icon("th"),
              column(8,
                     # Main Panel
                     div(class="panel panel-default",""),# top line
+                    div(class="list-group",
                     div(class="panel panel-default", 
                         # Side bar header
                         div(class="panel-heading","Quality Profiling Results")
-                    ),
+                    )),
              
                    fluidRow(
                       
@@ -163,7 +164,7 @@ tabPanel("-Using Indexed KBs Dataset-",icon = icon("th"),
                                  "      )
                                  ),
                                  actionLink("link_to_tabpanel_validate",HTML("
-                                <h4 class=\"list-group-item-heading\">Validate Quality Issues</h4>"),class="list-group-item")
+                                <h5 class=\"list-group-item-heading\">Validate Quality Issues</h5>"),class="list-group-item")
                                  
                               )
                              
@@ -209,11 +210,18 @@ tabPanel("-Using KB Snapshots Dataset-",icon = icon("th"),
              div(class="col-lg-3 col-md-3 col-sm-4",
                  # Side Bar
                 div(class="panel panel-default",""),# top line
-                div(class="panel panel-default", 
-                     # Side bar header
-                     div(class="panel-heading","Using KBs Snapshots Dataset")
-                 ),
+             
                  div(class="list-group table-of-contents",
+                     div(class="panel panel-default", 
+                         # Side bar header
+                         div(class="panel-heading","Using KBs Snapshots Dataset")
+                     ),
+                     
+                     uiOutput("uiSelInSchedulerNameAna"),
+                     actionButton("btnSchedulerDataAnalyze", "Visualize",icon("bar-chart-o"),
+                                  class="btn btn-default btn-sm"),
+                     
+                     tags$hr(),
                      
                      fileInput("file","Select KB various releases datasets",multiple=TRUE),
                      tags$span(class="help-block","Upload KB svaed snapshots data for Quality Profiling.")
@@ -237,10 +245,11 @@ tabPanel("-Using KB Snapshots Dataset-",icon = icon("th"),
              column(8,
                     # Main Panel
                     div(class="panel panel-default",""),# top line
+                    div(class="list-group",
                     div(class="panel panel-default", 
                         # Side bar header
                         div(class="panel-heading","Quality Profiling Results")
-                    ),
+                    )),
                     
                     fluidRow(
                       
@@ -316,7 +325,10 @@ tabPanel("-Using KB Snapshots Dataset-",icon = icon("th"),
                                    
                                    </div>
                                    "      )
-                                 )
+                                 ),
+                                 actionLink("link_to_tabpanel_validateSnap",HTML("
+                                  <h5 class=\"list-group-item-heading\">Validate Quality Issues</h5>"),class="list-group-item")
+                             )
                                  )
                              
                              
@@ -341,7 +353,6 @@ tabPanel("-Using KB Snapshots Dataset-",icon = icon("th"),
                                    </div>
                                    ")
                                      )
-                                 )
                              
                              
                                  ),

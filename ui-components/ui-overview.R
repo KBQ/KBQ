@@ -184,7 +184,7 @@ tabPanel("-Getting Started-",icon = icon("equalizer", lib = "glyphicon"),
                           <p>Inspect specific properties and explore the following instances.</p> 
                           <p class = \"label label-default\">Select & Submit</p> 
                           </br>
-                          <p>Select if the instance is True positive or False positive followed by providing comment for issues.Submit the result will save validation process for a specific property..</p>
+                          <p>Select if the instance is True positive or False positive followed by providing comment for issues.</p>
                           
                           </div>
                           ")

@@ -1,6 +1,29 @@
+## ==================================================================================== ##
+# KBQ Shiny App for quality analysis and visualization of any Knowledgebase.
+# Copyright (C) 2017  Mohammad Rashid
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+# 
+# You may contact the author of this code, Rifat Rashid, at <mohammad.rashid@polito.it>
+## ==================================================================================== ##
+
+
 # For KB Releases
 output$selIReleases <-renderUI({
   transData<-Data_queryReleases()
+  
+  
   if(is.null(transData)){
     # h5("Press Summary Data to load Classess", '...', heigth=200, width=200)
     return("Press Summary Data to load Class")
@@ -11,6 +34,8 @@ output$selIReleases <-renderUI({
   }
   
 })
+
+
 
 Data_queryReleases <- eventReactive(input$btnQuery, {
   sparlQuery_releases2(input$txtEndpoint,input$Kb_name_analyze)
@@ -30,16 +55,18 @@ output$selIClassName <-renderUI({
 })
 
 Data_queryClassName <- eventReactive(input$btnSelectClass, {
-  if(is.null(input$SelIRelData)){
-    showModal(modalDialog(
-      title = "Warnings",
-      paste("Press KB Releases button to extract all Releases of ",input$txtEndpoint,sep=" "),
-      easyClose = TRUE
-    ))  
-    
-  }else{
-    sparlQuery_className2(input$txtEndpoint,input$SelIRelData,input$Kb_name_analyze)
-  }
+  # if(is.null(input$SelIRelData)){
+  #   showModal(modalDialog(
+  #     title = "Warnings",
+  #     paste("Press KB Releases button to extract all Releases of ",input$txtEndpoint,sep=" "),
+  #     easyClose = TRUE
+  #   ))  
+  #   
+  # }else{
+    KbRelease<-sparlQuery_releases2(input$txtEndpoint,input$Kb_name_analyze)
+    print(KbRelease[nrow(KbRelease),]$v)
+    sparlQuery_className2(input$txtEndpoint,KbRelease[nrow(KbRelease),]$v,input$Kb_name_analyze)
+  # }
 })
 
 
@@ -1114,6 +1141,79 @@ output$approvalBox2 <- renderInfoBox({
  )
  
  
+ observeEvent(input$link_to_tabpanel_validateSnap, {
+   updateTabsetPanel(session, "nav-main", "-Validate-")
+ })
+ 
+ 
  observeEvent(input$link_to_tabpanel_validate, {
    updateTabsetPanel(session, "nav-main", "-Validate-")
  })
+ 
+ 
+ output$uiSelInSchedulerNameAna <-renderUI({
+   transData<-scheduleNameVis$data
+   if(is.null(transData)){
+     # h5("Press Summary Data to load Classess", '...', heigth=200, width=200)
+     selectInput("selInSchedulerNameAna","Current Schedulers", NULL, selected = NULL, selectize = FALSE, multiple = TRUE)
+     # showModal(proxyError)
+   }
+   
+   else{
+     selectInput("selInSchedulerNameAna","Current Schedulers", transData, selected = NULL, selectize = FALSE, multiple = TRUE)
+   }
+   
+ })
+ 
+ observeEvent(input$btnSchedulerDataAnalyze,{
+   
+   style <- isolate("notification")
+   # Create a Progress object
+   progress <- shiny::Progress$new(style = style)
+   progress$set(message = "Computing data", value = 0)
+   # Close the progress when this reactive exits (even if there's an error)
+   on.exit(progress$close())
+   
+   updateProgress <- function(value = NULL, detail = NULL) {
+     if (is.null(value)) {
+       value <- progress$getValue()
+       value <- value + (progress$getMax() - value) / 5
+     }
+     progress$set(value = value, detail = detail)
+   }
+   disable("btnSchedulerDataAnalyze")
+   # Compute the new data, and pass in the updateProgress function so
+   # that it can update the progress indicator.
+   compute_data(updateProgress)
+   
+   if(is.null(input$selInSchedulerNameAna)){
+     showModal(schedulerError)
+   }else{
+     scheduleName<-input$selInSchedulerNameAna
+     
+     # parm<-paste("http://178.62.126.59:8500/","readCSV?filename=",scheduleName,".csv",sep = "")
+     
+     parm<-paste("http://178.62.126.59:8500/","getSchedulerResults?filename=",scheduleName,".csv",sep = "")
+     
+     r<-GET(parm)
+     
+     dt<-content(r)
+     
+     # print(class(dt[[1]]))
+     dat<-fromJSON(dt[[1]])
+     # print(class(dat))
+     if(dat$result == "nofile")
+       showModal(schedulerUpdate)
+     else{
+       scheduleData$data <- dat
+       dat$Indexed<-0
+       qd$data<-dat
+       qp$data<-dat
+       if(nrow(CompletenessMeasure_property_with_issues(qp$data))!=0)
+         table_data$DT<-ReadData(CompletenessMeasure_property_with_issues(qp$data))  
+       # print(dat)
+     }
+   }
+   enable("btnSchedulerDataAnalyze")
+ }) 
+ 
