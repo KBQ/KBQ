@@ -23,7 +23,7 @@ navbarMenu("-Analyze-",icon = icon("stats", lib = "glyphicon"),
 tabPanel("-Using Indexed KBs Dataset-",icon = icon("th"),
          
          # ## =========================================================================== ##
-         # ## Tabs for SPARQL Endpoint
+         # ## Tabs for Indexed KBs
          # ## =========================================================================== ##
          
          div(class="container",
@@ -339,8 +339,8 @@ tabPanel("-Using KB Snapshots Dataset-",icon = icon("th"),
                                    <p>In particular, if the KB growth measure has value of 1 then the KB may have unexpected growth with unwanted entities otherwise KB remains stable.</p>
                                    
                                    </div>
-                                   "             )
-                                 )
+                                   ")
+                                     )
                                  )
                              
                              

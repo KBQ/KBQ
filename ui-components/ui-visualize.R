@@ -25,12 +25,12 @@ navbarMenu("-Visualize-",icon = icon("signal", lib = "glyphicon"),
                         div(class="col-lg-3 col-md-3 col-sm-4",
                     # Side Bar
                             div(class="panel panel-default",""),# top line
-                            div(class="panel panel-default", 
-                                # Side bar header
-                                div(class="panel-heading","Scheduler List")
-                            ),
-                            
+                             
                             div(class="list-group table-of-contents",
+                                div(class="panel panel-default", 
+                                    # Side bar header
+                                    div(class="panel-heading","Scheduler List")
+                                ),
                                 
                                 uiOutput("uiSelInSchedulerNameVis"),
                                 actionButton("btnSchedulerViewData", "Visualize",icon("bar-chart-o"),
@@ -43,29 +43,66 @@ navbarMenu("-Visualize-",icon = icon("signal", lib = "glyphicon"),
                         column(8,
                                # Main Panel
                                div(class="panel panel-default",""),
-                               div(class="panel panel-default", 
-                                   div(class="panel-heading","Visualize Scheduled datasets")
-                               ),
+                              
                                div(class="list-group table-of-contents",
-                                   uiOutput("Schedule_classs_name_last")   
-                               ),tags$hr(),
-                               column(6,
-                                      uiOutput("Schedule_graph_changes")),
-                               column(6,
-                                      uiOutput("Schedule_graph_growth"))
-                               # div(class="row", id="",
-                               #     div(class="col-lg-4 col-md-4 col-sm-4",
-                               #         div(class="list-group table-of-contents",
-                               #             
-                               #         )
-                               #     ),
-                               #     div(class="col-lg-4 col-md-4 col-sm-4",
-                               #         div(class="list-group table-of-contents",
-                               #             
-                               # 
-                               #         )
-                               #     )
-                               # )    
+                                   div(class="panel panel-default", 
+                                       div(class="panel-heading","Visualize Scheduled datasets")
+                                   ),
+                               tags$div(class="row", id="",
+                                  tags$div(class="col-lg-2 col-md-2 col-sm-2",
+                                     tags$span(class = "label label-default","Class Name:")
+                                  ),
+                                  tags$div(class="col-lg-9 col-md-9 col-sm-9",
+                                     div(class="list-group table-of-contents",
+                                       textOutput("scheduleClassName")
+                                        )
+                                      )
+                                   ),         
+                              
+                                tags$div(class="row", id="",
+                                        tags$div(class="col-lg-2 col-md-2 col-sm-2",
+                                                 tags$span(class = "label label-default","Property List:")
+                                        ),
+                                        tags$div(class="col-lg-9 col-md-9 col-sm-9",
+                                                 div(class="list-group table-of-contents",
+                                                     # textOutput("schedulePropertyList")
+                                                     uiOutput("uiSchedulerPropertyList")
+                                                 )
+                                        )
+                                ),
+                                tags$hr(),
+                               # column(width = ,
+                                 div(class="list-group",
+                                      actionLink("linkSchedulePageDetailsAnalysis",class="list-group-item", HTML(
+                                      "<h5 class=\"list-group-item-heading\">Quality Profiling Results</h4>
+                                       </br>
+                                       <p>View details quality profiling results based on the scheduler results</p> 
+                                       ")
+                                     )
+                                 ), 
+                               # uiOutput("Schedule_classs_name_last")
+                               tags$hr(),
+                               
+                               fluidRow(
+                                 column(6,
+                                        uiOutput("uiSchedule_graph_changes")),
+                                  column(6,
+                                         tags$span(class = "label label-default","Vairation in data changes based on entity count")
+                                           
+                                         )  
+                                 
+                               ),
+                               fluidRow(
+                                 column(6,
+                                        uiOutput("uiSchedule_graph_growth")
+                                        
+                                       ),
+                                 column(6,
+                                        tags$span(class = "label label-default","Stability behaviour of a class based on entity count")
+                                        
+                                        )
+                                 )
+                               )     
                         ) # End main panel
                     )# End main
                     
@@ -110,24 +147,29 @@ tabPanel("-Using Indexed KBs-",icon = icon("th"),
                     ),
                     div(class="list-group table-of-contents",
                         uiOutput("Indexed_classs_name_last")   
-                    ),tags$hr(),
-                    column(6,
-                           uiOutput("Indexed_graph_changes")),
-                    column(6,
-                           uiOutput("Indexed_graph_growth"))
-                    # div(class="row", id="",
-                    #     div(class="col-lg-4 col-md-4 col-sm-4",
-                    #         div(class="list-group table-of-contents",
-                    #             
-                    #         )
-                    #     ),
-                    #     div(class="col-lg-4 col-md-4 col-sm-4",
-                    #         div(class="list-group table-of-contents",
-                    #             
-                    # 
-                    #         )
-                    #     )
-                    # )    
+                    ),
+                    tags$hr(),
+                    
+                    fluidRow(
+                      column(6,
+                             uiOutput("Indexed_graph_changes")),
+                      column(6,
+                             tags$span(class = "label label-default","Vairation in data changes based on entity count")
+                             
+                      )  
+                      
+                    ),
+                    fluidRow(
+                      column(6,
+                             uiOutput("Indexed_graph_growth")
+                             
+                      ),
+                      column(6,
+                             tags$span(class = "label label-default","Stability behaviour of a class based on entity count")
+                             
+                      )
+                    )
+                   
              ) # End main panel
          )# End main
          

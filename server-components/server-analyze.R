@@ -792,6 +792,9 @@ output$approvalBox2 <- renderInfoBox({
    fluidPage(
      fluidRow(
        column(8,div(class="list-group table-of-contents",
+                    div(class="panel panel-default", 
+                        div(class="panel-heading","What is persistency ?")
+                    ),
                     includeMarkdown("md/persistency.md"),
                     div(class="list-group table-of-contents",
                         p('Persistency Plot based on Entity Variation'),
@@ -840,6 +843,9 @@ output$approvalBox2 <- renderInfoBox({
    fluidPage(
      fluidRow(
          column(8,div(class="list-group table-of-contents",
+                      div(class="panel panel-default", 
+                          div(class="panel-heading","What is Historical Persistency ?")
+                      ),
                       includeMarkdown("md/historical_persistency.md"),
                       div(class="list-group table-of-contents",
                           p('Versions With Persistency Issues'),
@@ -887,6 +893,9 @@ output$approvalBox2 <- renderInfoBox({
  
      fluidRow(
        column(8,div(class="list-group table-of-contents",
+                    div(class="panel panel-default", 
+                        div(class="panel-heading","What is completeness ?")
+                    ),
                     includeMarkdown("md/completeness.md"),
                     div(class="list-group table-of-contents",
                         p('Completeness measures of selected class on last two Release'),
@@ -911,25 +920,26 @@ output$approvalBox2 <- renderInfoBox({
                 "      )
               
               )
-       ),
-     fluidRow(
-       # tags$br(),
-       
-       tags$hr(),
-       HTML("<h4 class=\"list-group-item-heading\">Explore Various KB releases</h4>"),
-       tags$hr(),
-       column(4,
-              
-              uiOutput("selectCompletenessReleasesKbModel"),
-              p('Select two Releases',class="text-info")
-       ),
-       column(8,
-              p('Completeness measures of selected class on last two Release'),
-              DT::dataTableOutput("dt_completeness_issues_subset")
-              
-              # uiOutput("completenessModelResult")    
        )
-     )
+     # ,
+     # fluidRow(
+     #   # tags$br(),
+     #   
+     #   tags$hr(),
+     #   HTML("<h4 class=\"list-group-item-heading\">Explore Various KB releases</h4>"),
+     #   tags$hr(),
+     #   column(4,
+     #          
+     #          uiOutput("selectCompletenessReleasesKbModel"),
+     #          p('Select two Releases',class="text-info")
+     #   ),
+     #   column(8,
+     #          p('Completeness measures of selected class on last two Release'),
+     #          DT::dataTableOutput("dt_completeness_issues_subset")
+     #          
+     #          # uiOutput("completenessModelResult")    
+     #   )
+     # )
      
        ),size = "l",easyClose = T
  )
@@ -947,6 +957,9 @@ output$approvalBox2 <- renderInfoBox({
    fluidPage(
      fluidRow(
      column(8,div(class="list-group table-of-contents",
+                  div(class="panel panel-default", 
+                      div(class="panel-heading","What is KB growth ?")
+                  ),
                   includeMarkdown("md/kbgrowth.md"),
                   p('KB growth measures plot (entity count vs no. days)'),
                   uiOutput("plot_kb_growth")

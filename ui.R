@@ -54,7 +54,7 @@ tagList(
                 a("KBQ - {A Tool for Knowledge Base Quality Assessment Using Temporal Analysis}", href = "../", class="navbar-brand")
 
     ),
-    # tags$a("KBQ - {A Tool for Knowledge Base Quality Assessment Using Temporal Analysis}", href = "../", class="navbar-brand"),#
+    # tags$a("KBQ - {A Tool for Knowledge Base Quality Assessment Using Temporal Analysis}", href = "http://datascience.polito.it/shiny/KBQ-Tool/", class="navbar-brand"),#
     #"KBQ - {A Tool for Knowledge Base Quality Assessment Using Temporal Analysis}",
     
     # source("ui-components/ui-space.R",local=TRUE)$value,

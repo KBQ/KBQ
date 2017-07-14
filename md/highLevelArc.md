@@ -1,0 +1,1 @@
+ <img src="architecture2.png" alt="High Level Architecture" style="width: 100%"/>

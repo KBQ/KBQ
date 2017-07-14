@@ -215,8 +215,13 @@ output$textExecution_Updates<-renderText({ paste(" ", sdeUp$data , sep = " ") })
 
 output$textNo_of_tripes<-renderText({
   ele <- tryCatch(No_of_elements(), error = function(e) NULL)
-  if(is.null(ele))
+  if(is.null(ele)){
+  disable("btnBuildScheduler")  
   sdeUp$data<-paste("Class Name need to update: ","Press Class Name",sep = " ")
+  apiStatisCreateRfile$data="Class Name need to update:"
+  apiStatisCreateCornJobs$data="Press Class Name"
+  paste(apiStatisCreateRfile$data,"-",apiStatisCreateCornJobs$data,sep=" ")
+  }
   else
   paste("No. of Entities: ", ele , sep = " ") 
 })
@@ -233,7 +238,9 @@ No_of_elements<-reactive({
     # ele<-sparlQuery_snapsots_no_elements(input$txtEndpoint_snapshots,input$SelIClassData_snapshots)
     
     sdeUp$data<-paste("Class Name Updated",input$SelIClassData_snapshots,sep = " ")
-    
+    apiStatisCreateRfile$data=""
+    apiStatisCreateCornJobs$data=""
+    enable("btnBuildScheduler") 
     end.time <- Sys.time()
     time.taken <- end.time - start.time
     
@@ -483,7 +490,6 @@ output$ShowModelSchedulerName<-renderText({
 
 output$ShowModelSchedule<-renderText({
   
-   
   if(input$radioScheduler=="minutely")
   st<-paste("Schedule:","Every minute","starting from",strftime(input$txtScheduleAt, "%T"),sep=" ")
   if(input$radioScheduler=="hourly")
@@ -492,8 +498,7 @@ output$ShowModelSchedule<-renderText({
   st<-paste("Schedule:",input$radioScheduler,"at:",strftime(input$txtScheduleAt, "%T"),sep=" ")
   
   st
-  
-  
+
 })
 
 output$textSchedulerUpdates<-renderText({

@@ -441,9 +441,19 @@ plot_indexed_data<-function(entity){
   entity<-total_count(entity)
   entity<-distinct_entity(entity)
   
-  p<-ggplot(data=entity, aes(x=Release, y=count )) +
+  # p <- ggplot(df, aes(x=grp, y=val)) 
+  # p <- p + geom_bar(stat="identity", alpha=0.75) 
+  # 
+  # p + geom_line(data=df2, aes(x=grp, y=val), colour="blue")
+  
+  # p <- ggplot(data=entity, aes(x=Release, y=count, fill=className)) +
+  #      geom_bar(stat="identity")
+  
+  p<-ggplot(data=entity, aes(x=Release, y=count),color=className) +
     geom_line() +
     geom_point()+theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
+  
+  
   
   # my.df <- data.frame(index = 1:10, value = rnorm(10))
   

@@ -76,7 +76,10 @@ output$inc<-renderUI({
   dt=input$Subject
   dt=gsub(">", "", dt)
   dt=gsub("<", "", dt)
-  my_test <- tags$iframe(src=dt, height=500, width=800)
+  my_test <- 
+    tags$iframe(style="height:600px; width:100%; scrolling=yes", 
+                src=dt)
+    # tags$iframe(src=dt, height=500, width=800)
   if(is.null(dt))
     return("Quality Profile to extract intances")
   else
@@ -373,7 +376,7 @@ modalAnalyze<-modalDialog( title = "Explore Instances",
                                                ),
                                                shinyjs::useShinyjs(),
                                                #input fields
-                                               tags$hr(),
+                                               # tags$hr(),
                                                shinyjs::disabled(textInput("Subject", "Subject:")),
                                                shinyjs::disabled(textInput("Object", "Object:")),
                                                # actionButton("browse_subject", "Browse Subject",class="btn btn-default btn-sm"),
@@ -394,12 +397,24 @@ modalAnalyze<-modalDialog( title = "Explore Instances",
                                     
                                      )
                                   ),
+                                  tags$hr(),
+                                  div(class="list-group table-of-contents",
+                                      div(class="panel panel-default",
+                                          # Side bar header
+                                          div(class="panel-heading","Explore Instances")
+                                      )
+                                  ),     
+                                  
                                   fluidRow(
-                                    column(8,
+                                    column(9,
                                        htmlOutput("inc")
-                                    )
-                                  ),
-                                  tags$hr()
+                                    ),
+                                    column(3,
+                                      tags$p("Explore instances to detect if the subject missing in the current version."),
+                                      tags$p("For example:")
+                                      
+                                    )       
+                                  )
                               
                                   
                 ),size = "l",easyClose = T
