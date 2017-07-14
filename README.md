@@ -42,47 +42,17 @@ You may use this app by
 3. All the input datasets saved in a .CSV *comma-separated-value* file.
 4. File must have a header row. Each CSV contains following headers.
 
-<style type="text/css">
-.tg  {border-collapse:collapse;border-spacing:0;}
-.tg td{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}
-.tg .tg-yw4l{vertical-align:top}
-</style>
-<table class="tg">
-  <tr>
-    <th class="tg-031e">Header</th>
-    <th class="tg-031e">Description</th>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">p</td>
-    <td class="tg-yw4l">Property name for a specific class</td>
-  </tr>
-  <tr>
-    <td class="tg-031e">freq</td>
-    <td class="tg-031e">Count of a property</td>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">Release</td>
-    <td class="tg-yw4l">Release information in date</td>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">className</td>
-    <td class="tg-yw4l">Name of the selected class for quality profiling</td>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">Graph</td>
-    <td class="tg-yw4l">Name of the graph </td>
-  </tr>
-  <tr>
-    <td class="tg-yw4l">count</td>
-    <td class="tg-yw4l">Entity count of the class</td>
-  </tr>
-</table>
+| CSV Header    | Description |
+| ------------- | ------------- |
+| p             | Property name for a specific class  |
+| freq          | Count of a property |
+| Release       | Release information in date |
+| className     | Name of the selected class for quality profiling |
+| Graph         | Name of the graph |
+| count         | Entity count of the class |
 
 
 For periodic data extraction we have created a set of REST API. We use this API to create scheduler in the hosting server based on the selected class. Details API documentation presented in the github: https://github.com/rifat963/KbDataObservetory
-
-
 
 
 #### Analyze
