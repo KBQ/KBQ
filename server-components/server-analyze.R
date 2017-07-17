@@ -63,9 +63,58 @@ Data_queryClassName <- eventReactive(input$btnSelectClass, {
   #   ))  
   #   
   # }else{
-    KbRelease<-sparlQuery_releases2(input$txtEndpoint,input$Kb_name_analyze)
-    print(KbRelease[nrow(KbRelease),]$v)
-    sparlQuery_className2(input$txtEndpoint,KbRelease[nrow(KbRelease),]$v,input$Kb_name_analyze)
+
+  style <- isolate("notification")
+  # Create a Progress object
+  progress <- shiny::Progress$new(style = style)
+  progress$set(message = "Computing data", value = 0)
+  # Close the progress when this reactive exits (even if there's an error)
+  on.exit(progress$close())
+  
+  updateProgress <- function(value = NULL, detail = NULL) {
+    if (is.null(value)) {
+      value <- progress$getValue()
+      value <- value + (progress$getMax() - value) / 5
+    }
+    progress$set(value = value, detail = detail)
+  }
+  disable("btnSelectClass")
+  # Compute the new data, and pass in the updateProgress function so
+  # that it can update the progress indicator.
+  compute_data(updateProgress)
+  
+  
+    
+    if(input$Kb_name_analyze=="<http://data.loupe.linked.es/dbpedia/es/1>")
+    { 
+      if(file.exists("cache/cacheDataEsDBpedia.rds"))
+        cacheData$data<-readRDS("cache/cacheDataEsDBpedia.rds")
+      else{
+        cacheData$data<- sparqlQuery_extractAll(input$txtEndpoint,input$Kb_name_analyze)
+        print(cacheData$data$className)
+        saveRDS(cacheData$data, "cache/cacheDataEsDBpedia.rds")
+      }
+    }
+   
+
+  if(input$Kb_name_analyze=="<http://opendata.aragon.es/informes/>")
+  { 
+    if(file.exists("cache/cacheDataAargon.rds"))
+      cacheData$data<-readRDS("cache/cacheDataAargon.rds")
+    else{
+      cacheData$data<- sparqlQuery_extractAll(input$txtEndpoint,input$Kb_name_analyze)
+      saveRDS(cacheData$data, "cache/cacheDataAargon.rds")
+    }
+    
+  }
+     
+    enable("btnSelectClass")   
+  
+    return(cacheData$data)
+      
+    # KbRelease<-sparlQuery_releases2(input$txtEndpoint,input$Kb_name_analyze)
+    # print(KbRelease[nrow(KbRelease),]$v)
+    # sparlQuery_className2(input$txtEndpoint,KbRelease[nrow(KbRelease),]$v,input$Kb_name_analyze)
   # }
 })
 
@@ -463,8 +512,8 @@ output$approvalBox2 <- renderInfoBox({
        title = "Warnings",
        paste("Press Class Name button to extract all classes of ",input$txtEndpoint,sep=" "),
        easyClose = TRUE
-     ))  
-     
+     ))
+
    }else{
      
      style <- isolate("notification")
@@ -485,9 +534,9 @@ output$approvalBox2 <- renderInfoBox({
      # Compute the new data, and pass in the updateProgress function so
      # that it can update the progress indicator.
      compute_data(updateProgress)
-     
+     # qd$data<-subset(cacheData$data, className==input$SelIClassData)  
      qd$data <- tryCatch(sparlQuery_Measure2(input$txtEndpoint,input$SelIClassData,input$Kb_name_analyze), error = function(e) NULL) 
-     
+     print(colnames(qd$data))
      # taskscheduler_create(taskname = "myfancyscript", rscript = myscript, 
      # schedule = "ONCE", starttime = format(Sys.time() + 62, "%H:%M"))
      # write.csv(qd$data,"C:/Users/rifat/Desktop/R_milan/cube.csv",row.names =   FALSE)
@@ -502,8 +551,8 @@ output$approvalBox2 <- renderInfoBox({
        ))  
      }
      
-     
-     qp$data <- tryCatch(sparlQuery_Measure_properties2(input$txtEndpoint,input$SelIClassData,input$Kb_name_analyze), error = function(e) NULL)
+     qp$data<- subset(cacheData$data, className==input$SelIClassData)       
+     # qp$data <- tryCatch(sparlQuery_Measure_properties2(input$txtEndpoint,input$SelIClassData,input$Kb_name_analyze), error = function(e) NULL)
      
      if(is.null(qp$data)){
        print(qp$data)
@@ -514,6 +563,7 @@ output$approvalBox2 <- renderInfoBox({
        ))  
      }
      
+     print(paste("qpdata ",colnames(qp$data)))
      # showModal(modalDialog(
      #   title = "Notification",
      #   paste("Connection Error:","SPARQL Endpoint Not Available",sep=" "),
@@ -532,7 +582,7 @@ output$approvalBox2 <- renderInfoBox({
      enable("btnMeasure")
      
      # print(qd$data)
-   }
+    }
  })
  
  

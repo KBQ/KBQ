@@ -33,6 +33,8 @@ shinyServer(function(input,output,session) {
   ##
   ## Server functions are divided by tab
   ## 
+  # Fo all datasets caching
+  cacheData <- reactiveValues(data = NULL)
   
   #For entity datasets
   qd <- reactiveValues(data = NULL)

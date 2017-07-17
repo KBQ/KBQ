@@ -43,7 +43,8 @@ tabPanel("-Using Indexed KBs Dataset-",icon = icon("th"),
                      
                      # p('Select KB releases To query available class.'),
                      radioButtons("Kb_name_analyze", "Select Indexed Knowledge Base:",
-                                  c("Spanish DBpedia" = "<http://data.loupe.linked.es/dbpedia/es>",
+                                  c("Spanish DBpedia" = "<http://data.loupe.linked.es/dbpedia/es/1>",
+                                    # <http://data.loupe.linked.es/dbpedia/es/1>
                                     "Aragon" = "<http://opendata.aragon.es/informes/>")),
                      
                      tags$hr(),
@@ -167,11 +168,8 @@ tabPanel("-Using Indexed KBs Dataset-",icon = icon("th"),
                                 <h5 class=\"list-group-item-heading\">Validate Quality Issues</h5>"),class="list-group-item")
                                  
                               )
-                             
-                           
-                             
-                      ),
-                      infoBoxOutput("completenessSummaryBox")
+                     ),
+                    infoBoxOutput("completenessSummaryBox")
    
                     ),
                     tags$hr(),
@@ -275,16 +273,13 @@ tabPanel("-Using KB Snapshots Dataset-",icon = icon("th"),
                                    <p class = \"label label-default\"> Interpretation:</p> 
                                    <p>The value of 1 implies no persistency issue present in the class. The value of 0 indicates persistency issues found in the class.</p>
                                    
-                                   </div>
-                                   "
-                                 )
-                                 )
-                                 )
-                             
-                                 ),
-                      infoBoxOutput("PrsistencySummaryBoxUpload")
-                      
-                                 ),
+                                   </div>")
+                                   )
+                                )
+                              ),
+                             infoBoxOutput("PrsistencySummaryBoxUpload")
+
+                    ),
                     tags$hr(),
                     fluidRow(
                       column(width = 8,
@@ -308,7 +303,7 @@ tabPanel("-Using KB Snapshots Dataset-",icon = icon("th"),
                       
                       infoBoxOutput("HistPrsistencySummaryBoxUpload")
                       
-                                 ),
+                    ),
                     tags$hr(),
                     fluidRow(
                       column(width = 8,
@@ -329,14 +324,14 @@ tabPanel("-Using KB Snapshots Dataset-",icon = icon("th"),
                                  actionLink("link_to_tabpanel_validateSnap",HTML("
                                   <h5 class=\"list-group-item-heading\">Validate Quality Issues</h5>"),class="list-group-item")
                              )
-                                 )
-                             
-                             
-                             
-                                 ),
-                      infoBoxOutput("completenessSummaryBoxUpload")
-                      
-                                 ),
+                            
+                           
+                            
+                         ),
+                     
+                        infoBoxOutput("completenessSummaryBoxUpload")  
+                    ),
+   
                     tags$hr(),
                     fluidRow(
                       column(width = 8,
@@ -355,11 +350,12 @@ tabPanel("-Using KB Snapshots Dataset-",icon = icon("th"),
                                      )
                              
                              
-                                 ),
-                      infoBoxOutput("kbgrowthSummaryBoxUpload")
+                                 )
+                           
                       
                                  ),
-                    tags$hr()
+                      infoBoxOutput("kbgrowthSummaryBoxUpload")
+                    )
                     
                 ) # End main panel
          )

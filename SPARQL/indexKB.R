@@ -1,5 +1,42 @@
 # prefix loupe: <http://ont-loupe.linkeddata.es/def/core/>
 #   prefix dct:  <http://www.w3.org/ns/dcat#> 
+# prefix foaf: <http://xmlns.com/foaf/0.1/>
+#   prefix prov: <http://www.w3.org/ns/prov#>
+# 
+# select ?publishedDate ?version ?class ?prop ?instanceCount ?tripleCount  where {
+#   graph <http://opendata.aragon.es/informes/>  {
+#     
+#     ?v loupe:isVersionOf <http://opendata.aragon.es/informes/> ;
+#     dct:issued ?publishedDate .
+#     
+#     ?v loupe:isVersionOf <http://es.dbpedia.org/> ;
+#     dct:issued ?publishedDate .
+#     
+#     
+#     ?profile a loupe:RDFDataProfile;
+#     loupe:hasClassPartition ?cp;
+#     
+#     prov:wasDerivedFrom ?version .
+#     
+#     ?cp a loupe:ClassPartition ;
+#     loupe:hasClassPropertyPartition ?cpp .
+#          
+#     
+#     ?cpp a loupe:ClassPropertyPartition ;
+#     loupe:aboutClass   ?class;
+#     loupe:aboutProperty ?prop ;
+#     loupe:instanceCount ?instanceCount;
+#     loupe:tripleCount ?tripleCount .
+#   }
+# }
+# ORDER BY desc(?instanceCount)
+
+
+
+
+
+# prefix loupe: <http://ont-loupe.linkeddata.es/def/core/>
+#   prefix dct:  <http://www.w3.org/ns/dcat#> 
 # 
 # select ?v ?publishedDate where {
 #   graph <http://opendata.aragon.es/informes/> {
@@ -51,6 +88,86 @@ ORDER BY ?publishedDate", sep=" ")
 }
 
 
+# prefix loupe: <http://ont-loupe.linkeddata.es/def/core/>
+#   prefix dct:  <http://www.w3.org/ns/dcat#> 
+# prefix foaf: <http://xmlns.com/foaf/0.1/>
+#   prefix prov: <http://www.w3.org/ns/prov#>
+# 
+# select ?version ?class ?prop ?instanceCount ?tripleCount  where {
+#   graph <http://data.loupe.linked.es/dbpedia/es/1> {
+#     
+#     ?profile a loupe:RDFDataProfile;
+#     loupe:hasClassPartition ?cp;
+#     prov:wasDerivedFrom ?version .
+#     
+#     ?cp a loupe:ClassPartition ;
+#     loupe:hasClassPropertyPartition ?cpp .
+#     
+#     ?cpp a loupe:ClassPropertyPartition ;
+#     loupe:aboutClass   ?class;
+#     loupe:aboutProperty ?prop ;
+#     loupe:instanceCount ?instanceCount;
+#     loupe:tripleCount ?tripleCount .
+#   }
+# }
+# ORDER BY desc(?instanceCount)
+
+sparqlQuery_extractAll<-function(endpoint,graph_kb){
+  
+  if(is.null(version)){
+    return("Press KB releases")
+  }else{
+    endpoint="http://patents.linkeddata.es/sparql"
+    if(graph_kb=="<http://data.loupe.linked.es/dbpedia/es/1>")
+      versionOf="<http://es.dbpedia.org/>"
+    if(graph_kb=="<http://opendata.aragon.es/informes/>")
+      versionOf="<http://opendata.aragon.es/informes/>"
+    
+    query<-paste("prefix loupe: <http://ont-loupe.linkeddata.es/def/core/>
+      prefix dct:  <http://www.w3.org/ns/dcat#>
+    prefix foaf: <http://xmlns.com/foaf/0.1/>
+      prefix prov: <http://www.w3.org/ns/prov#>
+
+    select ?v ?Release ?version ?className ?Property ?freq ?count  where {
+      graph",graph_kb,"{
+
+        ?profile a loupe:RDFDataProfile;
+        loupe:hasClassPartition ?cp;
+        prov:wasDerivedFrom ?version .
+        
+
+        ?version loupe:versionLabel ?Release .
+
+        ?cp a loupe:ClassPartition ;
+        loupe:hasClassPropertyPartition ?cpp .
+
+        
+        ?cpp a loupe:ClassPropertyPartition ;
+        loupe:aboutClass   ?className;
+        loupe:aboutProperty ?Property ;
+        loupe:instanceCount ?freq;
+        loupe:tripleCount ?count .
+      }
+    }
+    ORDER BY desc(?freq)",sep=" ")
+    
+    # print(query)
+    
+    query_data <- SPARQL(endpoint,query)
+    # query results for all the class in a given version
+    query_result <- query_data$results
+    query_result$Indexed=1
+    print(unique(query_result$label))
+    
+    
+    return(query_result)
+
+  }
+  
+}
+
+
+
 sparlQuery_className2<-function(endpoint,version,graph_kb){
   # print(version)
   if(is.null(version)){
@@ -97,7 +214,7 @@ sparlQuery_className2<-function(endpoint,version,graph_kb){
 }
 
 
-sparlQuery_Measure2<-function(endpoint,className,graph_kb){
+sparlQuery_Measure2<-function(endpoint,className,graph_name){
   
   # print(className)
   if(is.null(className)){
@@ -105,9 +222,11 @@ sparlQuery_Measure2<-function(endpoint,className,graph_kb){
   }else{
     # endpoint="http://patents.linkeddata.es/sparql"
     #  className="<http://schema.org/Place>"
-    if(graph_kb=="<http://data.loupe.linked.es/dbpedia/es>")
+    if(graph_name=="<http://data.loupe.linked.es/dbpedia/es/1>"){
       versionOf="<http://es.dbpedia.org/>"
-    if(graph_kb=="<http://opendata.aragon.es/informes/>")
+      graph_kb="<http://data.loupe.linked.es/dbpedia/es>"
+    }
+    if(graph_name=="<http://opendata.aragon.es/informes/>")
       versionOf="<http://opendata.aragon.es/informes/>"
     
     query <- "prefix loupe: <http://ont-loupe.linkeddata.es/def/core/>

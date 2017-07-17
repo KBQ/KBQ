@@ -112,9 +112,9 @@ tabPanel("-Collect-",icon = icon("cog", lib = "glyphicon"),
                             bsTooltip("txtSchedulerName", "Define a Scheduler Name.Example:scheduler_places",
                                       "right", options = list(container = "body")),
                             radioButtons("radioScheduler", "Schedule tasks:",
-                                         c("Every Minute" = "minutely",
-                                           "Every Hour" = "hourly",
-                                           "Every Day" = "daily")),
+                                         # c("Every Minute" = "minutely",
+                                           # "Every Hour" = "hourly",
+                                          c("Every Day" = "daily")),
                             
                             # textInput("txtScheduleAt", "Scheduler at:", "hh:mm"),
                             # Use %H:%M format

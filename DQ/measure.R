@@ -132,7 +132,7 @@ CompletenessMeasure<-function(propertylist){
     
     Release=mixedsort(unique(propertylist$Release))
     
-    print(propertylist$Release)
+    # print(propertylist$Release)
     
     st=tail(as.character(Release), n=2)
     st<-data.frame(v=st)
@@ -176,6 +176,7 @@ CompletenessMeasure_property_with_issues<-function(propertylist){
     # st<-propertylist
     # data<-distinct_entity(st)
     Release=unique(st$Release)
+    print(Release)
     lastDep=st[st$Release==Release[length(Release)],]
     # print(lastDep)
     
