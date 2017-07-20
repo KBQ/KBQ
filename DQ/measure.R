@@ -176,7 +176,11 @@ CompletenessMeasure_property_with_issues<-function(propertylist){
     # st<-propertylist
     # data<-distinct_entity(st)
     Release=unique(st$Release)
+    
+    print("####")
     print(Release)
+    print("####")
+    
     lastDep=st[st$Release==Release[length(Release)],]
     # print(lastDep)
     
@@ -198,19 +202,51 @@ CompletenessMeasure_property_with_issues<-function(propertylist){
   }
   else{# Measure with indexed data where we set indexed = 1
     
-    Release=mixedsort(unique(propertylist$Release))
+    # Release=mixedsort(unique(propertylist$Release))
+    # print("## Release after mixedsort")
+    # print(Release)
     
-    st=tail(as.character(Release), n=2)
-    st<-data.frame(v=st)
-    dt<-mixedsort(st$v)
-    
-    print(dt)
-    
-    
-    lastDep=propertylist[propertylist$Release==dt[length(dt)],]
+    if(grepl("purl.org",propertylist$className)){
+      print("####### aargon ######")
+      Release=mixedsort(unique(propertylist$Release))
+      
+      st=tail(as.character(Release), n=2)
+      print("## print st with tail")
+      print(st)
+      
+      
+      st<-data.frame(v=st)
+      dt<-mixedsort(st$v)
+      print("## with completeness issue")
+      print(dt)
+      
+      lastDep=propertylist[propertylist$Release==dt[length(dt)],]
+      # print(lastDep)
+      
+      prevDep=propertylist[propertylist$Release==dt[length(dt)-1],]
+      
+      
+    }else{
+      print("#### dbpedia ######")
+      Release=unique(propertylist$Release)
+      
+      print(Release)
+      
+      lastDep=propertylist[propertylist$Release==Release[1],]
+      # print(lastDep)
+      
+      prevDep=propertylist[propertylist$Release==Release[2],]
+
+    }
+
+    # Release=unique(propertylist$Release)
+    # print("## Release without mixedsort")
+    # print(Release)
+
+    # lastDep=propertylist[propertylist$Release=="2016-04",]#dt[length(dt)],]
     # print(lastDep)
     
-    prevDep=propertylist[propertylist$Release==dt[length(dt)-1],]
+    # prevDep=propertylist[propertylist$Release=="2015-10",]#dt[length(dt)-1],]
     
     Merge=merge(x=lastDep, y=prevDep, by="Property", all = TRUE)
     
@@ -220,9 +256,11 @@ CompletenessMeasure_property_with_issues<-function(propertylist){
     
     ConsistencyData=Comp[Comp$freqDiff<0,]
     
+    print("@@@ last two version")
+    print(ConsistencyData$Release.x)
+    print(ConsistencyData$Release.y)
     ConsistencyData<-ConsistencyData[complete.cases(ConsistencyData),]
     # print(ConsistencyData)
-    
     return(ConsistencyData)
     
   }
@@ -275,7 +313,12 @@ Percentage_of_CompletenessMeasure<-function(propertylist){
     
     st<-total_count(propertylist)
     # data<-distinct_entity(st)
+    
     Release=unique(st$Release)
+  
+    
+    
+    
     lastDep=st[st$Release==Release[length(Release)],]
     # print(lastDep)
     
@@ -302,14 +345,25 @@ Percentage_of_CompletenessMeasure<-function(propertylist){
   else{# Measure with indexed data where we set indexed = 1
     
     Release=unique(propertylist$Release)
+    
+    
+    print("#####")
+    print(Release)
+    print("#####")
+    
     st=tail(as.character(Release), n=2)
     st<-data.frame(v=st)
     dt<-mixedsort(st$v)
+
     
-    lastDep=propertylist[propertylist$Release==dt[length(dt)],]
+    print("##Print St###")
+    print(st)
+    print("#####")
+    
+    lastDep=propertylist[propertylist$Release=="2016-04",]#dt[length(dt)],]
     # print(lastDep)
     
-    prevDep=propertylist[propertylist$Release==dt[length(dt)-1],]
+    prevDep=propertylist[propertylist$Release=="2015-10",]#dt[length(dt)-1],]
     
     total<-rbind(lastDep,prevDep)
     
@@ -322,6 +376,8 @@ Percentage_of_CompletenessMeasure<-function(propertylist){
     ConsistencyData=Comp[Comp$freqDiff<0,]
     
     ConsistencyData<-ConsistencyData[complete.cases(ConsistencyData),]
+    
+    
     # print(ConsistencyData)
     
     percentage= (1-nrow(ConsistencyData)/nrow(total))*100

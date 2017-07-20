@@ -87,23 +87,23 @@ Data_queryClassName <- eventReactive(input$btnSelectClass, {
     
     if(input$Kb_name_analyze=="<http://data.loupe.linked.es/dbpedia/es/1>")
     { 
-      if(file.exists("cache/cacheDataEsDBpedia.rds"))
-        cacheData$data<-readRDS("cache/cacheDataEsDBpedia.rds")
+      if(file.exists("DQ/cacheDataEsDBpedia.rds"))
+        cacheData$data<-readRDS("DQ/cacheDataEsDBpedia.rds")
       else{
         cacheData$data<- sparqlQuery_extractAll(input$txtEndpoint,input$Kb_name_analyze)
         print(cacheData$data$className)
-        saveRDS(cacheData$data, "cache/cacheDataEsDBpedia.rds")
+        saveRDS(cacheData$data, "DQ/cacheDataEsDBpedia.rds")
       }
     }
    
 
   if(input$Kb_name_analyze=="<http://opendata.aragon.es/informes/>")
   { 
-    if(file.exists("cache/cacheDataAargon.rds"))
-      cacheData$data<-readRDS("cache/cacheDataAargon.rds")
+    if(file.exists("DQ/cacheDataAargon.rds"))
+      cacheData$data<-readRDS("DQ/cacheDataAargon.rds")
     else{
       cacheData$data<- sparqlQuery_extractAll(input$txtEndpoint,input$Kb_name_analyze)
-      saveRDS(cacheData$data, "cache/cacheDataAargon.rds")
+      saveRDS(cacheData$data, "DQ/cacheDataAargon.rds")
     }
     
   }
