@@ -50,7 +50,7 @@ observeEvent(input$btnQueryIndexed, {
     
     # print(InR$data)
     
-    InC$data <- sparlQuery_className2(input$txtEndpoint,InR$data[nrow(InR$data),],input$Kb_name)
+     InC$data <- sparlQuery_className2(input$txtEndpoint,InR$data[nrow(InR$data),],input$Kb_name)
     
     # print(InC$data)
   }
@@ -81,35 +81,36 @@ output$Indexed_graph_changes <-renderUI({
   else{
     if (is.null(input$InIndexed_className)) return("Data Extraction Error")
     else{
-      # plotOutput("indexPlot")
-       plotlyOutput('indexPlot',width = "100%") 
+       plotOutput("indexPlot")
+       # plotlyOutput('indexPlot',width = "100%") 
     }
   }
 })
 
-# output$indexPlot<-renderPlot({
-#   st<-tryCatch(sparlQuery_Measure2(input$txtEndpoint_Indexed,input$InIndexed_className,input$Kb_name), error = function(e) NULL) 
+output$indexPlot<-renderPlot({
+  st<-tryCatch(sparlQuery_Measure2(input$txtEndpoint_Indexed,input$InIndexed_className,input$Kb_name), error = function(e) NULL)
+  if(is.null(st)){
+   
+    print(empty_plot())
+  }
+  else{
+    p<-plot_indexed_data(st)
+    print(p)
+  }
+})
+
+
+# output$indexPlot<-renderPlotly({
+#   
+#   st<-tryCatch(sparlQuery_Measure2(input$txtEndpoint_Indexed,input$InIndexed_className,input$Kb_name), error = function(e) NULL)
 #   if(is.null(st))
 #     ggplotly(empty_plot())
 #   else{
 #     p<-plot_indexed_data(st)
-#     print(p)
+#     ggplotly(p)
 #   }
-#   
+# 
 # })
-
-
-output$indexPlot<-renderPlotly({
-  
-  st<-tryCatch(sparlQuery_Measure2(input$txtEndpoint_Indexed,input$InIndexed_className,input$Kb_name), error = function(e) NULL)
-  if(is.null(st))
-    ggplotly(empty_plot())
-  else{
-    p<-plot_indexed_data(st)
-    ggplotly(p)
-  }
-
-})
 
 
 output$Indexed_graph_growth <-renderUI({
@@ -123,29 +124,15 @@ output$Indexed_graph_growth <-renderUI({
   else{
     if (is.null(input$InIndexed_className)) return("Data Extraction Error")
     else{
-      # plotOutput("indexGrowthPlot")
-       plotlyOutput('indexGrowthPlot',width = "100%")
+      plotOutput("indexGrowthPlot")
+       # plotlyOutput('indexGrowthPlot',width = "100%")
     }
   }
 })
 
-# output$indexGrowthPlot<-renderPlot({
-#   st<-tryCatch(sparlQuery_Measure2(input$txtEndpoint_Indexed,input$InIndexed_className,input$Kb_name), error = function(e) NULL) 
-#   # print(st)
-#   
-#   if(is.null(st)){
-#     ggplotly(empty_plot())
-#   }
-#   else{
-#     p<-plot_Kbgrowth_data(st)
-#     
-#     print(p)   
-#   }
-# })
-
-output$indexGrowthPlot<-renderPlotly({
+output$indexGrowthPlot<-renderPlot({
   st<-tryCatch(sparlQuery_Measure2(input$txtEndpoint_Indexed,input$InIndexed_className,input$Kb_name), error = function(e) NULL)
-  print(st)
+  # print(st)
 
   if(is.null(st)){
     ggplotly(empty_plot())
@@ -153,9 +140,23 @@ output$indexGrowthPlot<-renderPlotly({
   else{
     p<-plot_Kbgrowth_data(st)
 
-    ggplotly(p)
+    print(p)
   }
 })
+
+# output$indexGrowthPlot<-renderPlotly({
+#   st<-tryCatch(sparlQuery_Measure2(input$txtEndpoint_Indexed,input$InIndexed_className,input$Kb_name), error = function(e) NULL)
+#   print(st)
+# 
+#   if(is.null(st)){
+#     ggplotly(empty_plot())
+#   }
+#   else{
+#     p<-plot_Kbgrowth_data(st)
+# 
+#     ggplotly(p)
+#   }
+# })
 
 
 ## ==================================================================================== ##
@@ -337,34 +338,34 @@ output$uiSchedule_graph_changes <-renderUI({
     return("Press Summary Statistics to Plot Class Changes based on entity Count")
   }
   else{
-      # plotOutput("ScheduleindexPlot")
-      plotlyOutput('ScheduleindexPlot')
+       plotOutput("ScheduleindexPlot")
+      # plotlyOutput('ScheduleindexPlot')
   }
 })
 
-# output$ScheduleindexPlot<-renderPlot({
-#   st<-tryCatch(scheduleData$data , error = function(e) NULL) 
-#   if(is.null(st))
-#     ggplotly(empty_plot())
-#   else{
-#     p<-plot_indexed_data(st)
-#     print(p)
-#   }
-#   
-# })
-
-
-output$ScheduleindexPlot<-renderPlotly({
-st<-tryCatch(scheduleData$data , error = function(e) NULL)   
-
-if(is.null(st))
+output$ScheduleindexPlot<-renderPlot({
+  st<-tryCatch(scheduleData$data , error = function(e) NULL)
+  if(is.null(st))
     ggplotly(empty_plot())
   else{
     p<-plot_indexed_data(st)
-    ggplotly(p)
+    print(p)
   }
 
 })
+
+
+# output$ScheduleindexPlot<-renderPlotly({
+# st<-tryCatch(scheduleData$data , error = function(e) NULL)   
+# 
+# if(is.null(st))
+#     ggplotly(empty_plot())
+#   else{
+#     p<-plot_indexed_data(st)
+#     ggplotly(p)
+#   }
+# 
+# })
 
 
 output$uiSchedule_graph_growth <-renderUI({
@@ -376,41 +377,41 @@ output$uiSchedule_graph_growth <-renderUI({
     return("Press Summary Statics to plot KnowlegeBase growth")
   }
   else{
-    # plotOutput("ScheduleGrowthPlot")
-    plotlyOutput('ScheduleGrowthPlot')
+     plotOutput("ScheduleGrowthPlot")
+    # plotlyOutput('ScheduleGrowthPlot')
   }
 })
 
-# output$ScheduleGrowthPlot<-renderPlot({
-#   st<-tryCatch(scheduleData$data, error = function(e) NULL)
-#   
-#   # print(st)
-#   if(is.null(st)){
-#     return("Not enough dataset")
-#     # ggplotly(empty_plot())
-#   }
-#   else{
-#     p<-tryCatch(plot_Kbgrowth_data(st), error = function(e) NULL)
-#     
-#     print(p)   
-#   }
-# })
- options(shiny.sanitize.errors = TRUE) 
-output$ScheduleGrowthPlot<-renderPlotly({
-  
+output$ScheduleGrowthPlot<-renderPlot({
   st<-tryCatch(scheduleData$data, error = function(e) NULL)
-  print(st)
 
+  # print(st)
   if(is.null(st)){
-    ggplotly(empty_plot())
+    return("Not enough dataset")
+    # ggplotly(empty_plot())
   }
   else{
     p<-tryCatch(plot_Kbgrowth_data(st), error = function(e) NULL)
-    if(is.null(p))
-      ggplotly(empty_plot())
-    else
-      ggplotly(p)
+
+    print(p)
   }
 })
+ options(shiny.sanitize.errors = TRUE) 
+# output$ScheduleGrowthPlot<-renderPlotly({
+#   
+#   st<-tryCatch(scheduleData$data, error = function(e) NULL)
+#   print(st)
+# 
+#   if(is.null(st)){
+#     ggplotly(empty_plot())
+#   }
+#   else{
+#     p<-tryCatch(plot_Kbgrowth_data(st), error = function(e) NULL)
+#     if(is.null(p))
+#       ggplotly(empty_plot())
+#     else
+#       ggplotly(p)
+#   }
+# })
 
 

@@ -1,0 +1,57 @@
+---
+title: "Quality Problem Report"
+author: '-----'
+date: "July 21, 2017"
+output: html_document
+params:
+  perPlot: 'NULL'
+  perTable: 'NULL'
+  histPlot: 'NULL'
+  histTable: 'NULL'
+  compTableIssue: 'NULL'
+  CompTableAll: 'NULL'
+  Kbgplot: 'NULL'
+
+---
+
+# Persistency 
+
+```{r,echo=FALSE,warning=FALSE}
+library('knitr')
+
+params[["perPlot"]]
+```
+
+```{r,echo=FALSE,warning=FALSE}
+kable(params[["perTable"]], format = "markdown")
+```
+
+# Historical Persistency 
+
+```{r,echo=FALSE,warning=FALSE}
+
+params[["histPlot"]]
+```
+
+```{r,echo=FALSE,warning=FALSE}
+kable(params[["histTable"]], format = "markdown")
+```
+
+# Completeness
+
+```{r,echo=FALSE,warning=FALSE}
+ kable(params[["compTableIssue"]], format = "markdown")
+```
+
+```{r,echo=FALSE,warning=FALSE}
+ kable(params[["CompTableAll"]], format = "markdown")
+```
+
+
+
+# KB growth
+
+```{r,echo=FALSE,warning=FALSE}
+
+params[["Kbgplot"]]
+```

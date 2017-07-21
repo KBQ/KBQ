@@ -59,7 +59,7 @@
 
 sparlQuery_releases2<-function(endpoint,graph_kb){
   
-  if(graph_kb=="<http://data.loupe.linked.es/dbpedia/es>")
+  if(graph_kb=="<http://data.loupe.linked.es/dbpedia/es/1>")
     versionOf="<http://es.dbpedia.org/>"
   if(graph_kb=="<http://opendata.aragon.es/informes/>")
     versionOf="<http://opendata.aragon.es/informes/>"

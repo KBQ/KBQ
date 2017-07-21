@@ -33,6 +33,11 @@ shadeAreaP<-function(p,allEntity){
 
 }
 
+reportPersistencyPlot<-function(transData){
+p<-plot_persistency_data(transData)
+areaPlot<-shadeAreaP(p,transData)
+return(areaPlot)
+}
 
 # Persistency plot
 
@@ -49,7 +54,7 @@ plot_persistency_data<-function(entity){
   }
   else{
     
-    if(grepl("purl.org",entity$className)){
+    if(grepl("purl.org",entity[1,]$className)){
       print("####### aargon ######")
       # Release=mixedsort(unique(propertylist$Release))
       # 
@@ -118,7 +123,7 @@ plotHistoricalPersistencyData<-function(entity){
   }
   else{
     
-    if(grepl("purl.org",entity$className)){
+    if(grepl("purl.org",entity[1,]$className)){
       print("####### aargon ######")
       # Release=mixedsort(unique(propertylist$Release))
       # 
@@ -165,5 +170,92 @@ plotHistoricalPersistencyData<-function(entity){
 }
 
 range01 <- function(x){(x-min(x))/(max(x)-min(x))}
-# use lapply to apply doit() to every column in a data frame
-# mtcars is built into R
+
+
+# KB growth plot
+
+plot_Kbgrowth_data<-function(data){
+  
+  if(data[1,]$Indexed==0){
+    st<-total_count(data)
+    st<-distinct_entity(st)
+    entity= ddply(st,.(className), here(transform), days=fn(Release))
+    # ND<-NormDist(entityWithDays)
+    
+    en=entity[1:nrow(entity)-1,]
+    
+    enLm=lm(count~days,data=en)
+    
+    pred=data.frame(days=entity$days,count=predict(enLm,entity))
+    
+    summary(enLm)
+    
+    res=mean(abs(enLm$residuals))
+    
+    p<-ggplot(entity, aes(x = days, y = count)) + 
+      geom_point() +
+      geom_line(data=pred,color="red")+
+      geom_ribbon(data=pred,aes(ymin=count-res,ymax=count+res),alpha=0.2)+
+      theme_hc()+
+      scale_colour_tableau()
+    
+    return(p)
+    
+  }
+  else{
+    entity= ddply(data,.(className), here(transform), days=fn(Release))
+    en=entity[1:nrow(entity)-1,]
+    
+    enLm=lm(count~days,data=en)
+    
+    pred=data.frame(days=entity$days,count=predict(enLm,entity))
+    
+    summary(enLm)
+    
+    res=mean(abs(enLm$residuals))
+    
+    p<-ggplot(entity, aes(x = days, y = count)) + 
+      geom_point() +
+      geom_line(data=pred,color="red")+
+      geom_ribbon(data=pred,aes(ymin=count-res,ymax=count+res),alpha=0.2)+
+      theme_hc()+
+      scale_colour_tableau()
+    
+    return(p)
+  }
+  
+}
+
+
+######## For visualization ##########
+
+
+#--------Funtions for plot----------------#
+
+plot_indexed_data<-function(entity){
+  entity<-total_count(entity)
+  entity<-distinct_entity(entity)
+  
+  # p <- ggplot(df, aes(x=grp, y=val)) 
+  # p <- p + geom_bar(stat="identity", alpha=0.75) 
+  # 
+  # p + geom_line(data=df2, aes(x=grp, y=val), colour="blue")
+  
+  # p <- ggplot(data=entity, aes(x=Release, y=count, fill=className)) +
+  #      geom_bar(stat="identity")
+  
+  p<-ggplot(data=entity, aes(x=Release, y=count),color=className) +
+    geom_line() +
+    geom_point()+theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))+
+    theme_hc()+
+    scale_colour_tableau()
+  
+  
+  # my.df <- data.frame(index = 1:10, value = rnorm(10))
+  
+  #' create the ggplot object
+  return(p)
+}
+
+
+

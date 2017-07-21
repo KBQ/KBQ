@@ -654,9 +654,8 @@ output$approvalBox2 <- renderInfoBox({
      return()
    else{
      
-     p<-plot_persistency_data(transData)
-     areaPlot<-shadeAreaP(p,transData)
-     print(areaPlot)
+     print(reportPersistencyPlot(qd$data))
+     # print(areaPlot)
    }
    # my.ggp<-p
    # my.ggp.yrange <- ggplot_build(my.ggp)$layout$panel_ranges[[1]]$y.range
@@ -673,30 +672,8 @@ output$approvalBox2 <- renderInfoBox({
    if(is.null(qd$data)){ 
      return ()}
    
-   transData<-dt_persistency_data(qd$data)
+   reportPersistency(qd$data)
    
-   if(grepl("purl.org",transData$className)){
-     return()
-   }
-   if("Indexed" %in% names(transData))
-   {
-     dropsIndexed <- c("Indexed")
-     
-     transData<-transData[ , !(names(transData) %in% dropsIndexed)]
-     
-     dropsClassName<- c("className","v")
-     
-     transData<-transData[ , !(names(transData) %in% dropsClassName)]
-     
-   }
-   else{
-     
-     dropsClassName<- c("className")
-     
-     transData<-transData[ , !(names(transData) %in% dropsClassName)]
-      
-     transData
-   }
    
  },options=list(pageLength = 10,autoWidth = FALSE, ordering=F),selection="none",rownames= FALSE)
  
@@ -768,22 +745,7 @@ output$approvalBox2 <- renderInfoBox({
  output$dt_historical_persistency <- DT::renderDataTable({
    
    if(is.null(qd$data)){ return ()}
-   transData<-HistPersistencyMeasure_data(qd$data)
-   
-   if(grepl("purl.org",transData$className)){
-     return()
-   }
-   if("Indexed" %in% names(transData))
-   {
-     drops <- c("Indexed","v","className")
-     transData<-transData[ , !(names(transData) %in% drops)]
-   }
-   else{
-     drops <- c("className")
-     transData<-transData[ , !(names(transData) %in% drops)]
-      transData
-     
-   } 
+  reportHistoricalPersistency(qd$data)
  },options=list(pageLength = 10,autoWidth = FALSE, ordering=F),selection="none",rownames= FALSE)
  
  #-------------- Completeness ---------------------------------#
@@ -800,23 +762,39 @@ output$approvalBox2 <- renderInfoBox({
      names(transdata)[names(transdata)=="Release.x"] <- "Release"
      names(transdata)[names(transdata)=="freq.x"] <- "Frequency"
      
-     transdata#[,c(1:3)]
+     
+     
+     transdata[,c(1:3)]
      }
    
- }, options=list(dom='t',ordering=F),selection="none")
+ }, options=list(dom='t',ordering=F),selection="none",row.names=FALSE)
  
+ 
+ output$dt_completeness_all <- DT::renderDataTable({
+   
+   if(is.null(qp$data)){ return ()}
+   # transdata<-CompletenessMeasure_last_two_dep(qp$data)
+   
+   tableCompletenessMeasureLastTwo(qp$data)
+   
+ },options=list(pageLength = 10,autoWidth = FALSE, ordering=F),selection="none",rownames= FALSE)
  
  output$dt_completeness_issues <- DT::renderDataTable({
    
    if(is.null(qp$data)){ return ()}
    else{
-     transdata<-
-     tryCatch( CompletenessMeasure_property_with_issues(qp$data), error = function(e) return("Select two Release"))
-     names(transdata)[names(transdata)=="Release.x"] <- "Release"
-     names(transdata)[names(transdata)=="freq.x"] <- "Frequency"
+     transData<-qp$data
      
-     transdata[,c(1:3)]}
- }, options=list(dom='t',ordering=F),selection="none")
+     tableCompletenessIssues(transData)
+     # transdata<-
+     # tryCatch( CompletenessMeasure_property_with_issues(qp$data), error = function(e) return("Select two Release"))
+     # names(transdata)[names(transdata)=="Release.x"] <- "Release"
+     # names(transdata)[names(transdata)=="freq.x"] <- "Frequency"
+     # 
+     # transdata[,c(1:3)]
+    }
+ },  options=list(pageLength = 10,autoWidth = FALSE,dom='t', ordering=F),selection="none",rownames= FALSE)
+ 
  
  output$dt_upload_completeness_issues <- DT::renderDataTable({
    
@@ -824,14 +802,11 @@ output$approvalBox2 <- renderInfoBox({
    else{
      transdata<-CompletenessMeasure_property_with_issues(Upload_properties$data)
      transdata[,c(1:3)]}
- },options=list(dom='t',ordering=F),selection="none")
+ },options=list(dom='t',ordering=F),selection="none",rownames=F)
  
- output$dt_completeness_all <- DT::renderDataTable({
-   
-   if(is.null(qp$data)){ return ()}
-   transdata<-CompletenessMeasure_last_two_dep(qp$data)
-   
- })
+ 
+
+ 
  
  
  output$selectCompletenessReleasesKbModel<- renderUI({
@@ -1079,10 +1054,16 @@ output$approvalBox2 <- renderInfoBox({
  
  
  observeEvent(input$LinkHistPersistency, {
+   if(is.null(qd$data))
+     showModal(analyzeCheck)
+   else
    showModal(modal_histpersistency)
  })
  observeEvent(input$LinkHistPersistencyUpload, {
-   showModal(modal_histpersistency)
+   if(is.null(qd$data))
+     showModal(analyzeCheck)
+   else
+     showModal(modal_histpersistency)
  })
  
  modal_histpersistency<-modalDialog(title = "Historical Persistency ",
@@ -1138,10 +1119,16 @@ output$approvalBox2 <- renderInfoBox({
 
  
  observeEvent(input$LinkCompleteness, {
-   showModal(modelLinkCompleteness)
+   if(is.null(qd$data))
+     showModal(analyzeCheck)
+   else
+    showModal(modelLinkCompleteness)
  })
  observeEvent(input$LinkCompletenessUpload, {
-   showModal(modelLinkCompleteness)
+   if(is.null(qd$data))
+     showModal(analyzeCheck)
+   else
+     showModal(modelLinkCompleteness)
  })
  
  modelLinkCompleteness<-modalDialog( title = "Completeness Results",
@@ -1152,14 +1139,8 @@ output$approvalBox2 <- renderInfoBox({
                     div(class="panel panel-default", 
                         div(class="panel-heading","What is completeness ?")
                     ),
-                    includeMarkdown("md/completeness.md"),
-                    div(class="list-group table-of-contents",
-                        p('Completeness measures of selected class on last two Release'),
-                        DT::dataTableOutput("dt_completeness_issues")
-                        # p('Completeness measures of selected class'),
-                        # DT::dataTableOutput("dt_completeness_all")
-                        
-                    )
+                    includeMarkdown("md/completeness.md")
+                    
        )
        ),
        infoBoxOutput("completenessSummaryBoxModel"),
@@ -1177,34 +1158,55 @@ output$approvalBox2 <- renderInfoBox({
               
               )
        )
-     # ,
-     # fluidRow(
-     #   # tags$br(),
-     #   
-     #   tags$hr(),
-     #   HTML("<h4 class=\"list-group-item-heading\">Explore Various KB releases</h4>"),
-     #   tags$hr(),
-     #   column(4,
-     #          
-     #          uiOutput("selectCompletenessReleasesKbModel"),
-     #          p('Select two Releases',class="text-info")
-     #   ),
-     #   column(8,
-     #          p('Completeness measures of selected class on last two Release'),
-     #          DT::dataTableOutput("dt_completeness_issues_subset")
-     #          
-     #          # uiOutput("completenessModelResult")    
-     #   )
-     # )
+     ,
+     fluidRow(
+       # tags$br(),
+
+       # tags$hr(),
+       # HTML("<h4 class=\"list-group-item-heading\">Explore Various KB releases</h4>"),
+       # tags$hr(),
+       
+       column(12,
+              div(class="list-group table-of-contents",
+                  tags$hr(),
+                  h5('Following are list of properties with completeness issues:'),
+                  br(),
+                  DT::dataTableOutput("dt_completeness_issues")
+              )
+              
+              # p('Completeness measures of selected class on last two Release'),
+              # DT::dataTableOutput("dt_completeness_issues_subset")
+
+              # uiOutput("completenessModelResult")
+       )
+       ),
+     fluidRow(
+       column(12,
+              div(class="list-group table-of-contents",
+                  tags$hr(),
+                  h5('Completeness measures of selected class:'),
+                  br(),
+                  DT::dataTableOutput("dt_completeness_all")
+              )
+              # uiOutput("selectCompletenessReleasesKbModel"),
+              # p('Select two Releases',class="text-info")
+       )
+     )
      
        ),size = "l",easyClose = T
  )
  
  observeEvent(input$LinkKbgrowth, {
-   showModal(modelLinkKbgrowth)
+   if(is.null(qd$data))
+     showModal(analyzeCheck)
+   else
+     showModal(modelLinkKbgrowth)
  })
  observeEvent(input$LinkKbgrowthUpload, {
-   showModal(modelLinkKbgrowth)
+   if(is.null(qd$data))
+     showModal(analyzeCheck)
+   else
+     showModal(modelLinkKbgrowth)
  })
  
  # model dialog for KB growth
@@ -1216,9 +1218,8 @@ output$approvalBox2 <- renderInfoBox({
                   div(class="panel panel-default", 
                       div(class="panel-heading","What is KB growth ?")
                   ),
-                  includeMarkdown("md/kbgrowth.md"),
-                  p('KB growth measures plot (entity count vs no. days)'),
-                  uiOutput("plot_kb_growth")
+                  includeMarkdown("md/kbgrowth.md")
+                  
                 )
      ),
      infoBoxOutput("kbgrowthSummaryBoxModel"),
@@ -1235,18 +1236,31 @@ output$approvalBox2 <- renderInfoBox({
      ),
      fluidRow(
        # tags$br(),
-
+       
+       column(8,
+         div(class="list-group table-of-contents",
+           tags$hr(),
+           h5('KB growth assumption (entity count vs no. of days)'),
+           uiOutput("plot_kb_growth")
+           )
+         )
+       ),
+     
+       fluidRow(
        tags$hr(),
-       HTML("<h4 class=\"list-group-item-heading\">Explore Various KB releases</h4>"),
+       HTML("<h5 class=\"list-group-item-heading\">Explore Various KB releases</h4>"),
        tags$hr(),
-       column(4,
-         
-         uiOutput("selectKbReleasesKbModel"),
-         p('Select two Releases',class="text-info")
+       column(3,
+              div(class="list-group table-of-contents",      
+                 uiOutput("selectKbReleasesKbModel"),
+                 p('Select two Releases',class="text-info")
+              )
        ),
        column(8,
-         p('KB growth measures plot (entity count vs no.of days)'),
-         uiOutput("KbReleasesGrowthSubSetPlot")    
+              div(class="list-group table-of-contents",
+                h5('KB growth measures assumptuin (entity count vs no.of days)'),
+                uiOutput("KbReleasesGrowthSubSetPlot")   
+              )
        )
      )
 
@@ -1297,76 +1311,146 @@ output$approvalBox2 <- renderInfoBox({
  })
  
  
- output$downloadMeasure<-downloadHandler(
-   
-   filename = function() {
+ output$downloadMeasure <- 
+   downloadHandler(
      
-     st<-paste(Sys.Date(),"-",sep = "")
-     if(is.null(input$SelIClassData)) {
-       paste(st, "No Data found", sep=' #')
-     }else{
+     filename = function() {
        
-       
-       # repSt=gsub(".*#", "", input$SelIClassData_snapshots)
-       # 
-       # repSt=gsub(">", "", repSt)
-       
-       paste(st, input$SelIClassData, '.json', sep='')
-     }
-   },
-   content = function(file) {
-     
-     # transdata<-CompletenessMeasure_last_two_dep(qp$data)
-     # print(transdata)
-     properties<-toJSON(qp$data)
-     
-     entities<-toJSON(qd$data)
-     print(entities)
-     
-     jsonl <- list(entities,properties)
-     jsonc <- toJSON(jsonl)
-     
-     print(jsonc)
-     write(jsonc, file )
-     # write.csv(sd$data, file, row.names = FALSE)
-   }
-   
- )
+       st<-paste(Sys.Date(),"-",sep = "")
+       if(is.null(input$SelIClassData)) {
+         paste(st, "QualityProblemReport.html", sep='')
+       }else{
+         paste(st, "QualityProblemReport", '.html', sep='')
+       }
+     },
+     content = 
+       function(file)
+       {
+         tempReport <-  "report/report_file.Rmd"
+         file.copy("report.Rmd", tempReport, overwrite = TRUE)
+         
+         params <- list( perPlot= plot_persistency_data(qd$data),
+                         perTable= reportPersistency(qd$data),
+                         histPlot= plotHistoricalPersistencyData(qd$data),
+                         histTable= reportHistoricalPersistency(qd$data),
+                         compTableIssue=tableCompletenessIssues(qp$data),
+                         CompTableAll=tableCompletenessMeasureLastTwo(qp$data),
+                         Kbgplot=plot_Kbgrowth_data(qd$data))
+         
+         rmarkdown::render( tempReport, output_file = file,
+                            params = params,
+                            envir = new.env(parent = globalenv())
+         )
+         
+       }
+   )
  
- output$downloadMeasureIndexed<-downloadHandler(
-   
-   filename = function() {
-     
-     st<-paste(Sys.Date(),"-",sep = "")
-     if(is.null(input$SelIClassData)) {
-       paste(st, "No Data found", sep=' #')
-     }else{
+ # output$downloadMeasure<-downloadHandler(
+ #   
+ #   filename = function() {
+ #     
+ #     st<-paste(Sys.Date(),"-",sep = "")
+ #     if(is.null(input$SelIClassData)) {
+ #       paste(st, "No Data found", sep=' #')
+ #     }else{
+ #       
+ #       
+ #       # repSt=gsub(".*#", "", input$SelIClassData_snapshots)
+ #       # 
+ #       # repSt=gsub(">", "", repSt)
+ #       
+ #       paste(st, input$SelIClassData, '.json', sep='')
+ #     }
+ #   },
+ #   content = function(file) {
+ #     
+ #     # transdata<-CompletenessMeasure_last_two_dep(qp$data)
+ #     # print(transdata)
+ #     properties<-toJSON(qp$data)
+ #     
+ #     entities<-toJSON(qd$data)
+ #     print(entities)
+ #     
+ #     jsonl <- list(entities,properties)
+ #     jsonc <- toJSON(jsonl)
+ #     
+ #     print(jsonc)
+ #     write(jsonc, file )
+ #     # write.csv(sd$data, file, row.names = FALSE)
+ #   }
+ #   
+ # )
+ 
+ # output$downloadMeasureIndexed<-downloadHandler(
+ #   
+ #   filename = function() {
+ #     
+ #     st<-paste(Sys.Date(),"-",sep = "")
+ #     if(is.null(input$SelIClassData)) {
+ #       paste(st, "No Data found", sep=' #')
+ #     }else{
+ # 
+ #       # repSt=gsub(".*#", "", input$SelIClassData_snapshots)
+ #       # 
+ #       # repSt=gsub(">", "", repSt)
+ #       
+ #       paste(st, input$SelIClassData, '.json', sep='')
+ #     }
+ #   },
+ #   content = function(file) {
+ #     
+ #     # transdata<-CompletenessMeasure_last_two_dep(qp$data)
+ #     # print(transdata)
+ #     properties<-toJSON(qp$data)
+ #     
+ #     entities<-toJSON(qd$data)
+ #     print(entities)
+ #     
+ #     jsonl <- list(entities,properties)
+ #     jsonc <- toJSON(jsonl)
+ #     
+ #     print(jsonc)
+ #     write(jsonc, file )
+ #     # write.csv(sd$data, file, row.names = FALSE)
+ #   }
+ #   
+ # )
+ 
+ output$downloadMeasureIndexed <- 
+   downloadHandler(
+  
+        filename = function() {
 
-       # repSt=gsub(".*#", "", input$SelIClassData_snapshots)
-       # 
-       # repSt=gsub(">", "", repSt)
-       
-       paste(st, input$SelIClassData, '.json', sep='')
-     }
-   },
-   content = function(file) {
-     
-     # transdata<-CompletenessMeasure_last_two_dep(qp$data)
-     # print(transdata)
-     properties<-toJSON(qp$data)
-     
-     entities<-toJSON(qd$data)
-     print(entities)
-     
-     jsonl <- list(entities,properties)
-     jsonc <- toJSON(jsonl)
-     
-     print(jsonc)
-     write(jsonc, file )
-     # write.csv(sd$data, file, row.names = FALSE)
-   }
-   
- )
+           st<-paste(Sys.Date(),"-",sep = "")
+           if(is.null(input$SelIClassData)) {
+             paste(st, "QualityProblemReport.html", sep='')
+           }else{
+              paste(st, input$SelIClassData, '.html', sep='')
+           }
+         },
+     content = 
+       function(file)
+       {
+         tempReport <-  "report/report_file.Rmd"
+         file.copy("report.Rmd", tempReport, overwrite = TRUE)
+
+         params <- list( perPlot= plot_persistency_data(qd$data),
+                         perTable= reportPersistency(qd$data),
+                         histPlot= plotHistoricalPersistencyData(qd$data),
+                         histTable= reportHistoricalPersistency(qd$data),
+                         compTableIssue=tableCompletenessIssues(qp$data),
+                          CompTableAll=tableCompletenessMeasureLastTwo(qp$data),
+                         Kbgplot=plot_Kbgrowth_data(qd$data))
+
+         rmarkdown::render( tempReport, output_file = file,
+                            params = params,
+                            envir = new.env(parent = globalenv())
+         )
+      
+       }
+   )
+ 
+ 
  
  
  observeEvent(input$link_to_tabpanel_validateSnap, {

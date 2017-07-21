@@ -130,7 +130,7 @@ CompletenessMeasure<-function(propertylist){
   }
   else{# Measure with indexed data where we set indexed = 1
     
-    if(grepl("purl.org",propertylist$className)){
+    if(grepl("purl.org",propertylist[1,]$className)){
       print("####### aargon ######")
       Release=mixedsort(unique(propertylist$Release))
       
@@ -223,7 +223,7 @@ CompletenessMeasure_property_with_issues<-function(propertylist){
     # print("## Release after mixedsort")
     # print(Release)
     
-    if(grepl("purl.org",propertylist$className)){
+    if(grepl("purl.org",propertylist[1,]$className)){
       print("####### aargon ######")
       Release=mixedsort(unique(propertylist$Release))
       
@@ -255,15 +255,7 @@ CompletenessMeasure_property_with_issues<-function(propertylist){
 
     }
 
-    # Release=unique(propertylist$Release)
-    # print("## Release without mixedsort")
-    # print(Release)
-
-    # lastDep=propertylist[propertylist$Release=="2016-04",]#dt[length(dt)],]
-    # print(lastDep)
-    
-    # prevDep=propertylist[propertylist$Release=="2015-10",]#dt[length(dt)-1],]
-    
+   
     Merge=merge(x=lastDep, y=prevDep, by="Property", all = TRUE)
     
     Comp= ddply(Merge,.(Property), here(transform), freqDiff=(freq.x - freq.y))
@@ -272,9 +264,12 @@ CompletenessMeasure_property_with_issues<-function(propertylist){
     
     ConsistencyData=Comp[Comp$freqDiff<0,]
     
-    print("@@@ last two version")
-    print(ConsistencyData$Release.x)
-    print(ConsistencyData$Release.y)
+    
+    # ConsistencyData=Comp
+
+    # print("@@@ last two version")
+    # print(ConsistencyData$Release.x)
+    # print(ConsistencyData$Release.y)
     ConsistencyData<-ConsistencyData[complete.cases(ConsistencyData),]
     # print(ConsistencyData)
     return(ConsistencyData)
@@ -296,14 +291,24 @@ CompletenessMeasure_last_two_dep<-function(propertylist){
     
     prevDep=st[st$Release==Release[length(Release)-1],]
     
+    Merge=merge(x=lastDep, y=prevDep, by="Property", all = TRUE)
+    
+    # Comp= ddply(Merge,.(Property), here(transform), Complete=(freq.x - freq.y))
+    # 
+    # Comp<-Comp[complete.cases(Comp),]
+    # 
+    # Comp[Comp$Complete<0,]$Complete=0
+    # Comp[Comp$Complete>0,]$Complete=1
+    
+    
     total<-rbind(lastDep,prevDep)
     
-    return(total)
+    return(Merge)
     
   }
   else{# Measure with indexed data where we set indexed = 1
     
-    if(grepl("purl.org",propertylist$className)){
+    if(grepl("purl.org",propertylist[1,]$className)){
       print("####### aargon ######")
       Release=mixedsort(unique(propertylist$Release))
       
@@ -335,9 +340,18 @@ CompletenessMeasure_last_two_dep<-function(propertylist){
       
     }
     
+    Merge=merge(x=lastDep, y=prevDep, by="Property", all = TRUE)
+    
     total<-rbind(lastDep,prevDep)
     
-    return(total)
+    # Comp= ddply(Merge,.(Property), here(transform), Complete=(freq.x - freq.y))
+    # 
+    # Comp<-Comp[complete.cases(Comp),]
+    # 
+    # Comp[Comp$Complete<0,]$Complete=0
+    # Comp[Comp$Complete>0,]$Complete=1
+    
+    return(Merge)
     
   }
   
@@ -352,10 +366,7 @@ Percentage_of_CompletenessMeasure<-function(propertylist){
     # data<-distinct_entity(st)
     
     Release=unique(st$Release)
-  
-    
-    
-    
+ 
     lastDep=st[st$Release==Release[length(Release)],]
     # print(lastDep)
     
@@ -381,7 +392,7 @@ Percentage_of_CompletenessMeasure<-function(propertylist){
   }
   else{# Measure with indexed data where we set indexed = 1
     
-    if(grepl("purl.org",propertylist$className)){
+    if(grepl("purl.org",propertylist[1,]$className)){
       print("####### aargon ######")
       Release=mixedsort(unique(propertylist$Release))
       
@@ -540,35 +551,6 @@ fn<-function(ver){
   return(as.numeric(NumDays))
 }
 
-#--------Funtions for plot----------------#
-
-plot_indexed_data<-function(entity){
-  entity<-total_count(entity)
-  entity<-distinct_entity(entity)
-  
-  # p <- ggplot(df, aes(x=grp, y=val)) 
-  # p <- p + geom_bar(stat="identity", alpha=0.75) 
-  # 
-  # p + geom_line(data=df2, aes(x=grp, y=val), colour="blue")
-  
-  # p <- ggplot(data=entity, aes(x=Release, y=count, fill=className)) +
-  #      geom_bar(stat="identity")
-  
-  p<-ggplot(data=entity, aes(x=Release, y=count),color=className) +
-    geom_line() +
-    geom_point()+theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
-  
-  
-  
-  # my.df <- data.frame(index = 1:10, value = rnorm(10))
-  
-  #' create the ggplot object
-  return(p)
-}
-
-
-
-
 dt_persistency_data<-function(entity){
   
   if(entity[1,]$Indexed==0){
@@ -587,52 +569,5 @@ empty_plot<-function(){
   
   p<-ggplot(dt, aes(x = x, y = y)) + 
     geom_point() 
-  
-}
-plot_Kbgrowth_data<-function(data){
-  
-  if(data[1,]$Indexed==0){
-    st<-total_count(data)
-    st<-distinct_entity(st)
-    entity= ddply(st,.(className), here(transform), days=fn(Release))
-    # ND<-NormDist(entityWithDays)
-    
-    en=entity[1:nrow(entity)-1,]
-    
-    enLm=lm(count~days,data=en)
-    
-    pred=data.frame(days=entity$days,count=predict(enLm,entity))
-    
-    summary(enLm)
-    
-    res=mean(abs(enLm$residuals))
-    
-    p<-ggplot(entity, aes(x = days, y = count)) + 
-      geom_point() +
-      geom_line(data=pred,color="red")+
-      geom_ribbon(data=pred,aes(ymin=count-res,ymax=count+res),alpha=0.2)
-    
-    return(p)
-    
-  }
-  else{
-    entity= ddply(data,.(className), here(transform), days=fn(Release))
-    en=entity[1:nrow(entity)-1,]
-    
-    enLm=lm(count~days,data=en)
-    
-    pred=data.frame(days=entity$days,count=predict(enLm,entity))
-    
-    summary(enLm)
-    
-    res=mean(abs(enLm$residuals))
-    
-    p<-ggplot(entity, aes(x = days, y = count)) + 
-      geom_point() +
-      geom_line(data=pred,color="red")+
-      geom_ribbon(data=pred,aes(ymin=count-res,ymax=count+res),alpha=0.2)
-    
-    return(p)
-  }
   
 }

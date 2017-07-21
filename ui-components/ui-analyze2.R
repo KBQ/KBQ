@@ -43,9 +43,10 @@ tabPanel("-Using Indexed KBs Dataset-",icon = icon("th"),
                      
                      # p('Select KB releases To query available class.'),
                      radioButtons("Kb_name_analyze", "Select Indexed Knowledge Base:",
-                                  c("Spanish DBpedia" = "<http://data.loupe.linked.es/dbpedia/es/1>",
+                                  c("Spanish DBpedia" = "<http://data.loupe.linked.es/dbpedia/es/1>"
                                     # <http://data.loupe.linked.es/dbpedia/es/1>
-                                    "Aragon" = "<http://opendata.aragon.es/informes/>")),
+                                    # "Aragon" = "<http://opendata.aragon.es/informes/>"
+                                    )),
                      
                      tags$hr(),
                      # uiOutput("selIReleases"), 

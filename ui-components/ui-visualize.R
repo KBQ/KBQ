@@ -129,7 +129,7 @@ tabPanel("-Using Indexed KBs-",icon = icon("th"),
                      
                      textInput("txtEndpoint_Indexed", "KB SPARQL Endpoint:", "http://patents.linkeddata.es/sparql",width = 400),
                      radioButtons("Kb_name", "Select Knowledge Base:",
-                                  c("Spanish DBpedia" = "<http://data.loupe.linked.es/dbpedia/es>",
+                                  c("Spanish DBpedia" = "<http://data.loupe.linked.es/dbpedia/es/1>",
                                     "Aragon" = "<http://opendata.aragon.es/informes/>")),
                      actionButton("btnQueryIndexed", "Class Name",icon("bar-chart-o"),
                                   class="btn btn-default btn-sm"),
@@ -150,23 +150,30 @@ tabPanel("-Using Indexed KBs-",icon = icon("th"),
                     tags$hr(),
                     
                     fluidRow(
-                      column(6,
-                             uiOutput("Indexed_graph_changes")),
-                      column(6,
-                             tags$span(class = "label label-default","Vairation in data changes based on entity count")
+                      column(10,
+                             tags$span(class = "label label-default","Vairation in data 
+                                       changes based on entity count"),
                              
-                      )  
+                             uiOutput("Indexed_graph_changes")
+                             )
+                      # column(6,
+                      #        tags$span(class = "label label-default","Vairation in data changes based on entity count")
+                      #        
+                      # )  
                       
                     ),
                     fluidRow(
-                      column(6,
+                      column(10,
+                             tags$span(class = "label label-default","Stability behaviour of a 
+                                       class based on entity count"),
+                             
                              uiOutput("Indexed_graph_growth")
                              
-                      ),
-                      column(6,
-                             tags$span(class = "label label-default","Stability behaviour of a class based on entity count")
-                             
                       )
+                      # column(6,
+                      #        tags$span(class = "label label-default","Stability behaviour of a class based on entity count")
+                      #        
+                      # )
                     )
                    
              ) # End main panel
