@@ -10,9 +10,7 @@
 
 ## Instructions
 
-The app is hosted on the website: http://datascience.polito.it/shiny/KBQ-Tool/
-
-Code can be found on github: https://github.com/rifat963/KBQ-Tool
+The app is hosted on the website: http://datascience.polito.it/shiny/KBQ/
 
 To run this app locally on your machine, download R or RStudio and run the following commands once to set up the environment:
 
@@ -22,13 +20,14 @@ install.packages(c("ggplot2", "dplyr", "plyr",
 "rmarkdown","DT","readr","data.table",
 "shinyjs","shiny","shinydashboard",
 "shinythemes","stringr","jsonlite","gtools",
-"htmltools","httr","shinyTime","shinyBS"))
+"htmltools","httr","shinyTime","shinyBS","RCurl",
+"ggthemes","shinycssloaders"))
 
 ```
 You may now run the shiny app with just one command in R:
 
 ```
-shiny::runGitHub("KBQ-Tool", "rifat963")
+shiny::runGitHub("KBQ/KBQ", "rifat963")
 ```
 
 ### Collect
