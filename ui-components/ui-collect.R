@@ -24,9 +24,9 @@ tabPanel("-Collect-",icon = icon("cog", lib = "glyphicon"),
          # ## Tabs for SPARQL Endpoint
          # ## =========================================================================== ##
          
-         div(class="container",
+         div(class="container", id = "containerCollect",
              # main div  
-             div(class="col-lg-3 col-md-3 col-sm-4",
+             div(class="col-lg-3 col-md-3 col-sm-4", id="collectSideBar",
                  # Side Bar
                  div(class="panel panel-default",""),# top line
                 
@@ -78,14 +78,16 @@ tabPanel("-Collect-",icon = icon("cog", lib = "glyphicon"),
                      actionButton("resetButtonCollect", "Reset",icon("refresh"), 
                                   class="btn btn-default btn-sm"),
                      bsTooltip("resetButtonCollect", "Reset Session",
-                               "bottom", options = list(container = "body"))
+                               "bottom", options = list(container = "body")),
+                     tags$hr(),
+                     includeMarkdown("md/collectInstruction.md")
                     
                      
                  ),
                  div(class="panel panel-default","") # Bottom line
                  
              ), # End side bar
-             column(8,
+             column(8,id="collectMainBar",
                     # Main Panel
                     div(class="panel panel-default",""),
                  

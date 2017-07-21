@@ -130,20 +130,37 @@ CompletenessMeasure<-function(propertylist){
   }
   else{# Measure with indexed data where we set indexed = 1
     
-    Release=mixedsort(unique(propertylist$Release))
-    
-    # print(propertylist$Release)
-    
-    st=tail(as.character(Release), n=2)
-    st<-data.frame(v=st)
-    dt<-mixedsort(st$v)
-    
-    
-    
-    lastDep=propertylist[propertylist$Release==dt[length(dt)],]
-    # print(lastDep)
-    
-    prevDep=propertylist[propertylist$Release==dt[length(dt)-1],]
+    if(grepl("purl.org",propertylist$className)){
+      print("####### aargon ######")
+      Release=mixedsort(unique(propertylist$Release))
+      
+      st=tail(as.character(Release), n=2)
+      print("## print st with tail")
+      print(st)
+      
+      
+      st<-data.frame(v=st)
+      dt<-mixedsort(st$v)
+      print("## with completeness issue")
+      print(dt)
+      
+      lastDep=propertylist[propertylist$Release==dt[length(dt)],]
+      # print(lastDep)
+      
+      prevDep=propertylist[propertylist$Release==dt[length(dt)-1],]
+      
+      
+    }else{
+      print("#### dbpedia ######")
+      Release=unique(propertylist$Release)
+      
+      print(Release)
+      
+      lastDep=propertylist[propertylist$Release==Release[1],]
+      # print(lastDep)
+      prevDep=propertylist[propertylist$Release==Release[2],]
+      
+    }
     
     # print(prevDep)
     
@@ -234,7 +251,6 @@ CompletenessMeasure_property_with_issues<-function(propertylist){
       
       lastDep=propertylist[propertylist$Release==Release[1],]
       # print(lastDep)
-      
       prevDep=propertylist[propertylist$Release==Release[2],]
 
     }
@@ -287,16 +303,37 @@ CompletenessMeasure_last_two_dep<-function(propertylist){
   }
   else{# Measure with indexed data where we set indexed = 1
     
-    Release=mixedsort(unique(propertylist$Release))
-    
-    st=tail(as.character(Release), n=2)
-    st<-data.frame(v=st)
-    dt<-mixedsort(st$v)
-    
-    lastDep=propertylist[propertylist$Release==dt[length(dt)],]
-    # print(lastDep)
-    
-    prevDep=propertylist[propertylist$Release==dt[length(dt)-1],]
+    if(grepl("purl.org",propertylist$className)){
+      print("####### aargon ######")
+      Release=mixedsort(unique(propertylist$Release))
+      
+      st=tail(as.character(Release), n=2)
+      print("## print st with tail")
+      print(st)
+      
+      
+      st<-data.frame(v=st)
+      dt<-mixedsort(st$v)
+      print("## with completeness issue")
+      print(dt)
+      
+      lastDep=propertylist[propertylist$Release==dt[length(dt)],]
+      # print(lastDep)
+      
+      prevDep=propertylist[propertylist$Release==dt[length(dt)-1],]
+      
+      
+    }else{
+      print("#### dbpedia ######")
+      Release=unique(propertylist$Release)
+      
+      print(Release)
+      
+      lastDep=propertylist[propertylist$Release==Release[1],]
+      # print(lastDep)
+      prevDep=propertylist[propertylist$Release==Release[2],]
+      
+    }
     
     total<-rbind(lastDep,prevDep)
     
@@ -344,26 +381,37 @@ Percentage_of_CompletenessMeasure<-function(propertylist){
   }
   else{# Measure with indexed data where we set indexed = 1
     
-    Release=unique(propertylist$Release)
-    
-    
-    print("#####")
-    print(Release)
-    print("#####")
-    
-    st=tail(as.character(Release), n=2)
-    st<-data.frame(v=st)
-    dt<-mixedsort(st$v)
-
-    
-    print("##Print St###")
-    print(st)
-    print("#####")
-    
-    lastDep=propertylist[propertylist$Release=="2016-04",]#dt[length(dt)],]
-    # print(lastDep)
-    
-    prevDep=propertylist[propertylist$Release=="2015-10",]#dt[length(dt)-1],]
+    if(grepl("purl.org",propertylist$className)){
+      print("####### aargon ######")
+      Release=mixedsort(unique(propertylist$Release))
+      
+      st=tail(as.character(Release), n=2)
+      print("## print st with tail")
+      print(st)
+      
+      
+      st<-data.frame(v=st)
+      dt<-mixedsort(st$v)
+      print("## with completeness issue")
+      print(dt)
+      
+      lastDep=propertylist[propertylist$Release==dt[length(dt)],]
+      # print(lastDep)
+      
+      prevDep=propertylist[propertylist$Release==dt[length(dt)-1],]
+      
+      
+    }else{
+      print("#### dbpedia ######")
+      Release=unique(propertylist$Release)
+      
+      print(Release)
+      
+      lastDep=propertylist[propertylist$Release==Release[1],]
+      # print(lastDep)
+      prevDep=propertylist[propertylist$Release==Release[2],]
+      
+    }
     
     total<-rbind(lastDep,prevDep)
     
@@ -518,25 +566,7 @@ plot_indexed_data<-function(entity){
   return(p)
 }
 
-plot_persistency_data<-function(entity){
-  
-  if(entity[1,]$Indexed==0){
-    st<-total_count(entity)
-    st<-distinct_entity(st)
-    p<-ggplot(data=st, aes(x=Release, y=count, group=className,color=className)) +
-      geom_line() +
-      geom_point()+theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
-    return(p)
-  }
-  else{
-    p<-ggplot(data=entity, aes(x=Release, y=count,group=className,color=className)) +
-      geom_line() +
-      geom_point()+theme(axis.text.x=element_text(angle=90,hjust=1,vjust=0.5))
-    return(p)
-  }
-  
-  
-}
+
 
 
 dt_persistency_data<-function(entity){

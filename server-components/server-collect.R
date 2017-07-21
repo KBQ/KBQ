@@ -27,7 +27,7 @@ apiStatisNoOfCornJobs<- reactiveValues(data = NULL)
 
 sdeUp<- reactiveValues(data = NULL)
 
-scheduleName<- reactiveValues(data = NULL)
+
 
 # For execution TIme
 
@@ -70,18 +70,26 @@ Data_querySnapshotsGraph <- eventReactive(input$btnSelectGraph_snapshots, {
   # that it can update the progress indicator.
   compute_data(updateProgress)
   
+  if(url.exists(input$txtEndpoint_snapshots)){
+  
   if(is.null(sparlQuery_SnapshotsGraph(input$txtEndpoint_snapshots))){
     
     showModal(modalDialog(
-      title = "Important message",
-      "This is an important message!",
+      title = "Notification",
+      "Error loading data...!",
       easyClose = TRUE
     ))  
-  }
-  else{
-    
+   }
+   else{
     sparlQuery_SnapshotsGraph(input$txtEndpoint_snapshots)
-    
+   }
+  }else{
+    showModal(modalDialog(
+      title = "Notification",
+      "SPARQL Endpoint not Available.. Please check the url ..!",
+      easyClose = TRUE
+    ))  
+ 
   }
   
 })
@@ -111,18 +119,25 @@ Data_querySnapshotsClassName <- eventReactive(input$btnSelectClass_snapshots, {
   # that it can update the progress indicator.
   compute_data(updateProgress)
   
+  if(url.exists(input$txtEndpoint_snapshots)){
   if(is.null(sparlQuery_SnapshotsClassName(input$txtEndpoint_snapshots,input$SelIGraphData_snapshots))){
     
     showModal(modalDialog(
-      title = "Important message",
-      "This is an important message!",
+      title = "Notification",
+      "SPARQL Endpoint Not Avialable.. Please check the url..!",
       easyClose = TRUE
     ))  
   }
   else{
     
     sparlQuery_SnapshotsClassName(input$txtEndpoint_snapshots,input$SelIGraphData_snapshots)
-    
+   }
+  }else{
+    showModal(modalDialog(
+      title = "Notification",
+      "SPARQL Endpoint not Available.. Please check the url ..!",
+      easyClose = TRUE
+    ))  
   }
   
 })
@@ -157,8 +172,9 @@ output$selIGraph_snapshots <-renderUI({
 })
 
 observeEvent(input$resetButtonCollect, {
-   session$reload()
-   updateTabsetPanel(session, "nav-main", "-Collect-")
+    shinyjs::reset("containerCollect")
+   # session$reload()
+   # updateTabsetPanel(session, "nav-main", "-Collect-")
 })
  
 output$dynamicFixedQuery <- renderUI({ 
@@ -199,17 +215,31 @@ queryFixedText <- reactive({
 })
 
 output$dynamicSnapshotsTableView <- renderUI({ 
-  DT::dataTableOutput("dTsnapshotsData")
+  withSpinner(DT::dataTableOutput("dTsnapshotsData"))
 })
 
+# DT::renderDataTable(
+#   subsetTable(), filter = 'top', server = FALSE, 
+#   options = list(pageLength = 5, autoWidth = TRUE),
+#   rownames= FALSE
+# )
+
 output$dTsnapshotsData <- DT::renderDataTable({
-  if(is.null(sd$data)){ return ()}
-  if(ncol(sd$data)<6)
-    sd$data[,c(1,2,3,5)]
-  else
-    sd$data[,c(1,2,3,6)]
+  transData<-sd$data
+  if(is.null(transData)){ return ()}
   
-})
+  if(ncol(transData)<6)
+    transData<-sd$data[,c(1,2,3,5)]
+  else
+    transData<-sd$data[,c(1,2,3,6)]
+  
+  names(transData)[names(transData)=="p"] <- "Property"
+  names(transData)[names(transData)=="freq"] <- "Instance Count"
+  names(transData)[names(transData)=="Count"] <- "Entity Count"
+  
+  return(transData)
+  
+},options = list(pageLength = 10, autoWidth = TRUE),rownames= FALSE, selection="none")
 
 output$textExecution_Updates<-renderText({ paste(" ", sdeUp$data , sep = " ") })
 
@@ -382,25 +412,10 @@ output$uiSelInSchedulerName <-renderUI({
 })
 
 observe({
-   scheduleName$data<-getSchedulerNames()
+   # scheduleName$data<-getSchedulerNames()
 })
 
-getSchedulerNames<-function(){
-  
-  parm<-paste("http://178.62.126.59:8500/readSchedulerIndex",sep = "")
-  
-  r<-tryCatch(GET(parm), error = function(e) return(NULL))
-  # status_code(r)
-  if(!is.null(r)){
-  sd<-content(r)
-  DF<-fromJSON(sd[[1]])
-  DF$filename
-  }else{
-    
-    return(NULL)
-    
-    }
-}
+
 
 proxyError<-modalDialog(title = "Connection Error",
    fluidPage(

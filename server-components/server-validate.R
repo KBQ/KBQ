@@ -176,7 +176,7 @@ output$Valdata <- DT::renderDataTable({
   show<-data.frame(Property=unique(query_data_save$data$Property),Instances=unique(query_data_save$data$Instances))
   show
   
-}, options=list(dom='t',ordering=F),selection="none"
+}, options=list(dom='t',ordering=F),selection="none",row.names=F
 
 )
 

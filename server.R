@@ -27,15 +27,72 @@ source("utilities/utilities.R")
     # })
 # }
 
+
+
+
+
 print(sessionInfo())
 
 shinyServer(function(input,output,session) {
+
+  
+  getSchedulerNames<-function(){
+    
+    parm<-paste("http://178.62.126.59:8500/readSchedulerIndex",sep = "")
+    
+    # if(!url.exists("http://178.62.126.59:8500/getAllCornList")){
+    #   
+    #   showModal(proxyError)
+    #   
+    # }else{
+    
+    r<-tryCatch(GET(parm), error = function(e) return(NULL))
+    # status_code(r)
+    
+    if(!is.null(r)){
+      sd<-content(r)
+      DF<-fromJSON(sd[[1]])
+      DF$filename
+    }else{
+      # if(is.null(scheduleName$data))
+      showModal(proxyError)
+      return(NULL)
+      
+    }
+    # }
+    
+  }
+  
+  scheduleName<- reactiveValues(data = NULL)
+  
+  proxyError<-modalDialog(title = "Connection Error",
+                          fluidPage(
+                            fluidRow(
+                              tags$p("Fail to connect to API server at port:9500"),
+                              tags$p("Connection Error: Please Check Your proxy Settings or open the port:9500."),
+                              tags$p("Snapshots scheduling disabled")
+                            )
+                            
+                          )
+                          
+  )
+  
+  load_data <- function() {
+    scheduleName$data<-getSchedulerNames()
+    hide("loading_page")
+    
+    show("main_content")
+  }
+  
+  load_data()
+  
+  
   ##
   ## Server functions are divided by tab
   ## 
   # Fo all datasets caching
   cacheData <- reactiveValues(data = NULL)
-  
+
   #For entity datasets
   qd <- reactiveValues(data = NULL)
   

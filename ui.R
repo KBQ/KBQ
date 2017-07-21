@@ -24,25 +24,40 @@ source("utilities/utilities.R")
 # ui.R
 ##
 
-# collects all of the tab UIs
-#shinyUI(
-#
-
 tagList(
   tags$head(
+    
     tags$style(HTML(" .shiny-output-error-validation {color: darkred; } ")),
     tags$style(".mybuttonclass{background-color:#CD0000;} .mybuttonclass{color: #fff;} .mybuttonclass{border-color: #9E0000;}")
-    # tags$style(HTML('
-    # 
-    #                 .modal-lg {
-    #                 width: 4000px;
-    #                 
-    #                 }
-    #                 '))
+   
   ),
   ui<- fluidPage(
-
-
+    useShinyjs(),
+    div(
+      id = "loading_page",
+      HTML("
+       <div class=\"col-lg-2 col-md-2 col-sm-2\">
+  
+       </div>
+       <div class=\"col-lg-3 col-md-3 col-sm-4\">
+          <div style=\"display:table-cell; vertical-align:middle; text-align:center\">
+             <img src=\"loader3.gif\">
+         </div>
+       </div>
+        <div class=\"col-lg-3 col-md-3 col-sm-4\">
+            
+            <h4 style=\"display:table-cell; vertical-align:middle; text-align:center\"> Connecting to api server... </h4>
+        </div>
+      </div>   
+           
+      ")
+      
+    ),
+    
+    hidden(
+      div(
+        id = "main_content",
+      
     tags$style(type="text/css", "body {padding-top: 110px;} .navbar {padding-left: 110px;}"),
     tags$style(type="text/css", ".modal-lg { width: 90%;}"),
     
@@ -90,8 +105,11 @@ tagList(
     ## end
     ## ==================================================================================== ## 
     # tags$head(includeScript("www/google-analytics.js"))
-  ) #end navbarpage
-) #end taglist
+    ) # end navbarpage
+   ) # end taglist
+
+  ) # main-content
+ ) # end hidden
 )
 
 # Attach dependencies

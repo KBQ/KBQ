@@ -128,7 +128,7 @@ sparqlQuery_extractAll<-function(endpoint,graph_kb){
     prefix foaf: <http://xmlns.com/foaf/0.1/>
       prefix prov: <http://www.w3.org/ns/prov#>
 
-    select ?v ?Release ?version ?className ?Property ?freq ?count  where {
+    select ?Release ?version ?className ?Property ?freq ?count  where {
       graph",graph_kb,"{
 
         ?profile a loupe:RDFDataProfile;
@@ -270,7 +270,7 @@ sparlQuery_Measure2<-function(endpoint,className,graph_name){
     # query results for all the class in a given version
     query_result <- query_data$results
     
-    # print(query_result)
+    print(query_result)
     # query_result$className=className
     # query_result$Indexed=1
     # query_result$publishedDate<-as.POSIXct(query_result$publishedDate, origin = "1970-01-01")

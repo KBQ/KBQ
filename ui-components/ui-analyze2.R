@@ -26,7 +26,7 @@ tabPanel("-Using Indexed KBs Dataset-",icon = icon("th"),
          # ## Tabs for Indexed KBs
          # ## =========================================================================== ##
          
-         div(class="container",
+         div(class="container", id="IndexedKBs",
              # main div  
              div(class="col-lg-3 col-md-3 col-sm-4",
                  # Side Bar
@@ -74,8 +74,9 @@ tabPanel("-Using Indexed KBs Dataset-",icon = icon("th"),
                      actionButton("reset_button_analyze_Indexed", "Reset",icon("refresh"),
                                   class="btn btn-default btn-sm"),
                      bsTooltip("reset_button_analyze_Indexed", "Reset Session",
-                               "bottom", options = list(container = "body"))
-                     
+                               "bottom", options = list(container = "body")),
+                     tags$hr(),
+                     includeMarkdown("md/analyzeIndexedInstruction.md")
                  ),
                  tags$hr()
                  
@@ -216,28 +217,29 @@ tabPanel("-Using KB Snapshots Dataset-",icon = icon("th"),
                      ),
                      
                      uiOutput("uiSelInSchedulerNameAna"),
-                     actionButton("btnSchedulerDataAnalyze", "Visualize",icon("bar-chart-o"),
+                     actionButton("btnSchedulerDataAnalyze", "Quality Profile",icon("bar-chart-o"),
                                   class="btn btn-default btn-sm"),
                      
                      tags$hr(),
                      
                      fileInput("file","Select KB various releases datasets",multiple=TRUE),
-                     tags$span(class="help-block","Upload KB svaed snapshots data for Quality Profiling.")
-                     
-                 ),
-                 tags$hr(),
-                 div(class="list-group table-of-contents",
-                     downloadButton('downloadMeasure','Save',
-                                    class="btn btn-default btn-sm"),
-                     bsTooltip("downloadMeasure", "Save Measure Result",
-                               "bottom", options = list(container = "body")),
-                     actionButton("reset_button_analyze", "Reset",icon("refresh"),
-                                  class="btn btn-default btn-sm"),
-                     bsTooltip("reset_button_analyze", "Reset Session",
-                               "bottom", options = list(container = "body"))
-                     
-                 ),
-                 tags$hr()
+                     tags$span(class="help-block","Upload saved snapshots data for Quality Profiling."),
+                     tags$hr(),
+                     div(class="list-group table-of-contents",
+                         downloadButton('downloadMeasure','Save',
+                                        class="btn btn-default btn-sm"),
+                         bsTooltip("downloadMeasure", "Save Measure Result",
+                                   "bottom", options = list(container = "body")),
+                         actionButton("reset_button_analyze", "Reset",icon("refresh"),
+                                      class="btn btn-default btn-sm"),
+                         bsTooltip("reset_button_analyze", "Reset Session",
+                                   "bottom", options = list(container = "body"))
+                         
+                     ),
+                     tags$hr(),
+                     includeMarkdown("md/analyzeSnapshotsInstructions.md")
+                 )
+                
                  
              ), # End side bar
              column(8,

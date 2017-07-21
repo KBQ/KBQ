@@ -23,7 +23,6 @@
 output$selIReleases <-renderUI({
   transData<-Data_queryReleases()
   
-  
   if(is.null(transData)){
     # h5("Press Summary Data to load Classess", '...', heigth=200, width=200)
     return("Press Summary Data to load Class")
@@ -91,7 +90,7 @@ Data_queryClassName <- eventReactive(input$btnSelectClass, {
         cacheData$data<-readRDS("DQ/cacheDataEsDBpedia.rds")
       else{
         cacheData$data<- sparqlQuery_extractAll(input$txtEndpoint,input$Kb_name_analyze)
-        print(cacheData$data$className)
+        # print(cacheData$data$className)
         saveRDS(cacheData$data, "DQ/cacheDataEsDBpedia.rds")
       }
     }
@@ -496,7 +495,10 @@ output$approvalBox2 <- renderInfoBox({
  })
  
  observeEvent(input$reset_button_analyze, {
-   session$reload()
+   # session$reload()
+   # observeEvent(input$reset, {
+     shinyjs::reset("IndexedKBs")
+   # })
    
  })
  
@@ -534,9 +536,17 @@ output$approvalBox2 <- renderInfoBox({
      # Compute the new data, and pass in the updateProgress function so
      # that it can update the progress indicator.
      compute_data(updateProgress)
-     # qd$data<-subset(cacheData$data, className==input$SelIClassData)  
+     
+     if(input$Kb_name_analyze=="<http://opendata.aragon.es/informes/>"){
+     
+       qd$data<-subset(cacheData$data, className==input$SelIClassData)
+      
+     }
+     else
      qd$data <- tryCatch(sparlQuery_Measure2(input$txtEndpoint,input$SelIClassData,input$Kb_name_analyze), error = function(e) NULL) 
-     print(colnames(qd$data))
+     # print("###==query resilt")
+     # print(colnames(qd$data))
+     
      # taskscheduler_create(taskname = "myfancyscript", rscript = myscript, 
      # schedule = "ONCE", starttime = format(Sys.time() + 62, "%H:%M"))
      # write.csv(qd$data,"C:/Users/rifat/Desktop/R_milan/cube.csv",row.names =   FALSE)
@@ -563,7 +573,7 @@ output$approvalBox2 <- renderInfoBox({
        ))  
      }
      
-     print(paste("qpdata ",colnames(qp$data)))
+     # print(paste("qpdata ",colnames(qp$data)))
      # showModal(modalDialog(
      #   title = "Notification",
      #   paste("Connection Error:","SPARQL Endpoint Not Available",sep=" "),
@@ -586,7 +596,7 @@ output$approvalBox2 <- renderInfoBox({
  })
  
  
- #------------Persistency
+ #------------Persistency ------------
  
  #Persistency plot
  output$plot_persistency<- renderUI({
@@ -601,7 +611,7 @@ output$approvalBox2 <- renderInfoBox({
      if (is.null(transData)) return("Data Extraction Error")
      else{
       
-       plotOutput('persistencyPlot')
+       withSpinner(plotOutput('persistencyPlot'))  
        # plotlyOutput('persistencyPlot')
      }
    }
@@ -636,58 +646,145 @@ output$approvalBox2 <- renderInfoBox({
  #   print(ggplot_build(p)$layout$panel_ranges[[1]]$x.range)
  #   ggplotly(p)   
  # })
+ 
  output$persistencyPlot<-renderPlot({
    
-   p<-plot_persistency_data(qd$data)
-   
-   my.ggp<-p
-   my.ggp.yrange <- ggplot_build(my.ggp)$layout$panel_ranges[[1]]$y.range
-   my.ggp.xrange <- ggplot_build(my.ggp)$layout$panel_ranges[[1]]$x.range
-   g1 <- ggplot_gtable(ggplot_build(p))
-   print(g1[3,2]$grob)
-   print(ggplot_build(p)$layout$panel_ranges[[1]]$x.range)
-   print(p)   
+   transData<-qd$data
+   if(is.null(transData))
+     return()
+   else{
+     
+     p<-plot_persistency_data(transData)
+     areaPlot<-shadeAreaP(p,transData)
+     print(areaPlot)
+   }
+   # my.ggp<-p
+   # my.ggp.yrange <- ggplot_build(my.ggp)$layout$panel_ranges[[1]]$y.range
+   # my.ggp.xrange <- ggplot_build(my.ggp)$layout$panel_ranges[[1]]$x.range
+   # g1 <- ggplot_gtable(ggplot_build(p))
+   # print(g1[3,2]$grob)
+   # print(ggplot_build(p)$layout$panel_ranges[[1]]$x.range)
+   # print(p)   
  })
+ 
  
  output$dt_persistency_ <- DT::renderDataTable({
-   if(is.null(qd$data)){ return ()}
+   
+   if(is.null(qd$data)){ 
+     return ()}
+   
    transData<-dt_persistency_data(qd$data)
+   
+   if(grepl("purl.org",transData$className)){
+     return()
+   }
    if("Indexed" %in% names(transData))
    {
-   drops <- c("Indexed")
-   transData<-transData[ , !(names(transData) %in% drops)]
+     dropsIndexed <- c("Indexed")
+     
+     transData<-transData[ , !(names(transData) %in% dropsIndexed)]
+     
+     dropsClassName<- c("className","v")
+     
+     transData<-transData[ , !(names(transData) %in% dropsClassName)]
+     
    }
-   else
-   transData
- })
+   else{
+     
+     dropsClassName<- c("className")
+     
+     transData<-transData[ , !(names(transData) %in% dropsClassName)]
+      
+     transData
+   }
+   
+ },options=list(pageLength = 10,autoWidth = FALSE, ordering=F),selection="none",rownames= FALSE)
+ 
  
  #---------------Historical Persistency--------------------#
+ 
+ #Persistency plot
+ output$plotHistoricalPersistency<- renderUI({
+   
+   transData<-qd$data
+   
+   if(is.null(transData)){
+     # h5("Press Summary Data to load Classess", '...', heigth=200, width=200)
+     return()
+   }
+   else{
+     if (is.null(transData)) return("Data Extraction Error")
+     else{
+       
+       withSpinner(plotOutput('plotHistoricalPersistencyPlot'))  
+       # plotlyOutput('persistencyPlot')
+     }
+   }
+ })
+ 
+ output$plotHistoricalPersistencyPlot<-renderPlot({
+   
+   transData<-qd$data
+   if(is.null(transData))
+     return()
+   else{
+     
+     p<-plotHistoricalPersistencyData(transData)
+     
+     print(p)
+   }
+   # my.ggp<-p
+   # my.ggp.yrange <- ggplot_build(my.ggp)$layout$panel_ranges[[1]]$y.range
+   # my.ggp.xrange <- ggplot_build(my.ggp)$layout$panel_ranges[[1]]$x.range
+   # g1 <- ggplot_gtable(ggplot_build(p))
+   # print(g1[3,2]$grob)
+   # print(ggplot_build(p)$layout$panel_ranges[[1]]$x.range)
+   # print(p)   
+ })
  
  output$dt_historical_persistency_issues <- DT::renderDataTable({
    
    if(is.null(qd$data)){ return ()}
    transData<-HistPersistencyMeasure_data_issues(qd$data)
+   
+   if(grepl("purl.org",transData$className)){
+     return()
+   }
    if("Indexed" %in% names(transData))
    {
-     drops <- c("Indexed","v")
+     drops <- c("Indexed","v","className")
      transData<-transData[ , !(names(transData) %in% drops)]
+     
    }
-   else
+   else{
+     drops <- c("className")
+     transData<-transData[ , !(names(transData) %in% drops)]
+     
      transData
- })
+   }
+   
+ },options=list(pageLength = 10,autoWidth = FALSE, ordering=F),selection="none",rownames= FALSE)
  
  output$dt_historical_persistency <- DT::renderDataTable({
    
    if(is.null(qd$data)){ return ()}
    transData<-HistPersistencyMeasure_data(qd$data)
+   
+   if(grepl("purl.org",transData$className)){
+     return()
+   }
    if("Indexed" %in% names(transData))
    {
-     drops <- c("Indexed","v")
+     drops <- c("Indexed","v","className")
      transData<-transData[ , !(names(transData) %in% drops)]
    }
-   else
-     transData
- })
+   else{
+     drops <- c("className")
+     transData<-transData[ , !(names(transData) %in% drops)]
+      transData
+     
+   } 
+ },options=list(pageLength = 10,autoWidth = FALSE, ordering=F),selection="none",rownames= FALSE)
  
  #-------------- Completeness ---------------------------------#
  
@@ -852,18 +949,72 @@ output$approvalBox2 <- renderInfoBox({
  #   ggplotly(p)   
  # })
  
+ analyzeCheck<-modalDialog(title = "Notification",
+                         fluidPage(
+                           fluidRow(
+                             # tags$p("Fail to connect to API server at port:9500"),
+                             # tags$p("Connection Error: Please Check Your proxy Settings or open the port:9500."),
+                             tags$p("Please Press Class Name and Select a class for Quality Profiling..")
+                           )
+                           
+                         )
+                         
+ )
  
- #----------
+ #---------------------------------------------------------#
  
  observeEvent(input$LinkPersistency, {
-   showModal(modal_persistency)
+   if(is.null(qd$data))
+     showModal(analyzeCheck)
+   else
+     showModal(modal_persistency)
  })
  
  observeEvent(input$LinkPersistencyUpload, {
-   showModal(modal_persistency)
+   if(is.null(qd$data))
+     showModal(analyzeCheck)
+   else
+     showModal(modal_persistency)
  })
  
+ output$textLastRelease<-renderText({
+    transData<-qd$data
+    if(is.null(transData))
+      return()
+    else{
+      out<-paste("Release:",transData[nrow(transData),]$Release,"Entity Count:",
+                 transData[nrow(transData),]$count,sep = "")
+      
+      
+    }
+   
+ })
  
+  output$textPreviousRelease<-renderText({
+   transData<-qd$data
+   if(is.null(transData))
+     return()
+   else{
+     out<-paste("Release=",transData[nrow(transData)-1,]$Release,"Entity Count",
+                transData[nrow(transData)-1,]$count,sep = "")
+     
+     
+   }
+   
+ })
+ 
+ output$textPersistencyResult<-renderText({
+    transData<-qd$data
+    if(is.null(transData))
+      return()
+    else{
+      out<-paste("Persistency = ",Prsistency(transData),sep = "")
+
+      
+    }
+    
+  })  
+  
  modal_persistency<-modalDialog( title = "Persistency",
    
    fluidPage(
@@ -872,11 +1023,9 @@ output$approvalBox2 <- renderInfoBox({
                     div(class="panel panel-default", 
                         div(class="panel-heading","What is persistency ?")
                     ),
-                    includeMarkdown("md/persistency.md"),
-                    div(class="list-group table-of-contents",
-                        p('Persistency Plot based on Entity Variation'),
-                        uiOutput("plot_persistency")
-                    )
+                    includeMarkdown("md/persistency.md")
+                    
+                    
             )
        ),
        infoBoxOutput("PrsistencySummaryBoxModel"),
@@ -888,18 +1037,39 @@ output$approvalBox2 <- renderInfoBox({
                   <p class = \"label label-default\"> Interpretation:</p> 
                   <p>The value of 1 implies no persistency issue present in the class. The value of 0 indicates persistency issues found in the class.</p>
                   </div>
-                ")  
+                ")
+                
               )
        
      ),
-     tags$hr(),
+    
      fluidRow(
-       
-       column(width = 12,
+       column(8,
               div(class="list-group table-of-contents",
-                  
-                  p('Persistency result'),
+                  tags$hr(),
+                  h5('Persistency Plot based on Entity Count'),
+                  tags$br(),
+                  tags$br(),
+                  uiOutput("plot_persistency")
+                )
+              ),
+       column(width = 4,
+              div(class="list-group table-of-contents",
+                  tags$hr(),
+                  h5('Persistency result'),
+                  tags$hr(),
+                  p("-Entity Count variation between last two release-"),
+                  p("Last Release:"),
+                  textOutput("textLastRelease"),
+                  tags$br(),
+                  p("Previous Release:"),
+                  textOutput("textPreviousRelease"),
+                  p("Result:"),
+                  textOutput("textPersistencyResult"),
+                  tags$hr(),
                   uiOutput("dt_persistency")
+                  
+                  
               )
        )
      )
@@ -923,11 +1093,8 @@ output$approvalBox2 <- renderInfoBox({
                       div(class="panel panel-default", 
                           div(class="panel-heading","What is Historical Persistency ?")
                       ),
-                      includeMarkdown("md/historical_persistency.md"),
-                      div(class="list-group table-of-contents",
-                          p('Versions With Persistency Issues'),
-                          DT::dataTableOutput("dt_historical_persistency_issues")
-                      )
+                      includeMarkdown("md/historical_persistency.md")
+                     
                  )
          ),
          infoBoxOutput("HistPrsistencySummaryBoxModel"),
@@ -945,12 +1112,24 @@ output$approvalBox2 <- renderInfoBox({
          
      ),
      fluidRow(
-     
-     column(width = 12,
+     column(8,
+            
             div(class="list-group table-of-contents",
+                tags$hr(),
+                h5('Versions With Persistency value'),
+                uiOutput("plotHistoricalPersistency")
                 
+            )    
+       
+     ),   
+     column(width = 4,
+            div(class="list-group table-of-contents",
+                tags$hr(),
                 p('Historical Persistency measures of selected class'),
                 DT::dataTableOutput("dt_historical_persistency")
+                
+                # h5('Versions With Persistency value'),
+                # DT::dataTableOutput("dt_historical_persistency_issues")
             )
      )
      )
@@ -1162,8 +1341,7 @@ output$approvalBox2 <- renderInfoBox({
      if(is.null(input$SelIClassData)) {
        paste(st, "No Data found", sep=' #')
      }else{
-       
-       
+
        # repSt=gsub(".*#", "", input$SelIClassData_snapshots)
        # 
        # repSt=gsub(">", "", repSt)

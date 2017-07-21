@@ -66,22 +66,16 @@ viewQualityCharc<-modalDialog(
                       fluidPage(
                             tags$iframe(style="height:600px; width:100%; scrolling=yes", 
                                             src="http://softeng.polito.it/rifat/QualityCharacteristics.pdf")
-                                
                                 # HTML("<img src=\"~/md/architecture2.png\" alt=\"High Level Architecture\" style=\"width: 100%\"/>")
-                                
                       ),easyClose = T,size="l"
-                              
-                              
 )
-
 
 viewHighLevelArc<-modalDialog(title="High Level Architectutre",
                               fluidPage(
                                 includeMarkdown("md/highLevelArc.md")
-                                
                                 # HTML("<img src=\"~/md/architecture2.png\" alt=\"High Level Architecture\" style=\"width: 100%\"/>")
-                                
                               ),easyClose = T
 
-  
 )
+
+
