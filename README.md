@@ -21,7 +21,7 @@ install.packages(c("ggplot2", "dplyr", "plyr",
 "shinyjs","shiny","shinydashboard",
 "shinythemes","stringr","jsonlite","gtools",
 "htmltools","httr","shinyTime","shinyBS","RCurl",
-"ggthemes","shinycssloaders"))
+"ggthemes","shinycssloaders","knitr"))
 
 ```
 You may now run the shiny app with just one command in R:
