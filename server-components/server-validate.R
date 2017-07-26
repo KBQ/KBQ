@@ -343,7 +343,7 @@ output$responses <- DT::renderDataTable({
   # input$submit
   #update after delete is clicked
   # input$delete
-  
+  tryCatch(
   if(!is.null(upload_data_val$data)){
     
     show<-data.frame(Property=unique(upload_data_val$data$Property),Instances=unique(upload_data_val$data$Instances))
@@ -356,11 +356,11 @@ output$responses <- DT::renderDataTable({
       # if(!is.null(show2))
       # names(show)[names(show)=="Release.x"] <- "Release"
       # 
-      table_data$DT
+     table_data$DT
       
     
     }
-  
+  , error = function(e) NULL)
 }, server = FALSE, selection = "single",rownames=F
 )
 
