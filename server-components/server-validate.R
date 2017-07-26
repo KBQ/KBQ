@@ -351,10 +351,13 @@ output$responses <- DT::renderDataTable({
     table_data$DT=show
     # print(show)
    }else{
-      show<-table_data$DT
-      if(!is.null(show))
-      names(show)[names(show)=="Release.x"] <- "Release"
-      show
+     
+      # 
+      # if(!is.null(show2))
+      # names(show)[names(show)=="Release.x"] <- "Release"
+      # 
+      table_data$DT
+      
     
     }
   
