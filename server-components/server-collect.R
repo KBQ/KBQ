@@ -243,14 +243,29 @@ output$dTsnapshotsData <- DT::renderDataTable({
 
 output$textExecution_Updates<-renderText({ paste(" ", sdeUp$data , sep = " ") })
 
+connectionError<-modalDialog(title = "Notification",
+                          fluidPage(
+                            fluidRow(
+                              # tags$p("Fail to connect to API server at port:8500"),
+                              # tags$p("Connection Error: Please Check Your proxy Settings or open the port:8500."),
+                              tags$p("Connection Error ..Please try again...")
+                            )
+                            
+                          )
+)
+
 output$textNo_of_tripes<-renderText({
   ele <- tryCatch(No_of_elements(), error = function(e) NULL)
+  
   if(is.null(ele)){
-  disable("btnBuildScheduler")  
-  sdeUp$data<-paste("Class Name need to update: ","Press Class Name",sep = " ")
-  apiStatisCreateRfile$data="Class Name need to update:"
-  apiStatisCreateCornJobs$data="Press Class Name"
-  paste(apiStatisCreateRfile$data,"-",apiStatisCreateCornJobs$data,sep=" ")
+    
+     disable("btnBuildScheduler")  
+     sdeUp$data<-paste("Class Name need to update: ","Press Class Name",sep = " ")
+     apiStatisCreateRfile$data="Class Name need to update:"
+     apiStatisCreateCornJobs$data="Press Class Name"
+     paste(apiStatisCreateRfile$data,"-",apiStatisCreateCornJobs$data,sep=" ")
+     if(!is.null(input$SelIGraphData_snapshots) && !is.null(input$SelIClassData_snapshots))
+     showModal(connectionError)
   }
   else
   paste("No. of Entities: ", ele , sep = " ") 
@@ -268,10 +283,14 @@ No_of_elements<-reactive({
     # ele<-sparlQuery_snapsots_no_elements(input$txtEndpoint_snapshots,input$SelIClassData_snapshots)
     
     sdeUp$data<-paste("Class Name Updated",input$SelIClassData_snapshots,sep = " ")
+    
     apiStatisCreateRfile$data=""
     apiStatisCreateCornJobs$data=""
+    
     enable("btnBuildScheduler") 
+    
     end.time <- Sys.time()
+    
     time.taken <- end.time - start.time
     
     sdeT$data<- time.taken   
@@ -417,16 +436,16 @@ observe({
 
 
 
-proxyError<-modalDialog(title = "Connection Error",
-   fluidPage(
-     fluidRow(
-       tags$p("Connection Error: Please Check Your proxy Settings.")
-       
-     )
-     
-   )
-  
-)
+# proxyError<-modalDialog(title = "Connection Error",
+#    fluidPage(
+#      fluidRow(
+#        tags$p("Connection Error: Please Check Your proxy Settings.")
+#        
+#      )
+#      
+#    )
+#   
+# )
 
 dataModal <- function(failed = FALSE) {
   modalDialog(title = "Confirm Schdeduler",

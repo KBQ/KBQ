@@ -76,6 +76,11 @@ output$inc<-renderUI({
   dt=input$Subject
   dt=gsub(">", "", dt)
   dt=gsub("<", "", dt)
+  dt=URLdecode(dt)
+  
+  # RLdecode(z <- "ab%20cd")
+  # c(URLencode(z), URLencode(z, repeated = TRUE)) # first is usually wanted
+  
   my_test <- 
     tags$iframe(style="height:600px; width:100%; scrolling=yes", 
                 src=dt)

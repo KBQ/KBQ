@@ -6,4 +6,4 @@
 
 - **Quality Profile** Using scheduler press button *Quality Profile* for quality profiling results. Details quality profiling results can be viewed through each quality measure names. 
 
-- **Save** Save quality profiling results in a pdf file.
+- **Save** Save quality profiling results in a HTML file.

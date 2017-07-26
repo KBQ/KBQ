@@ -63,28 +63,87 @@ shinyServer(function(input,output,session) {
     
   }
   
+  gettingStarted<-modalDialog(
+    
+    fluidPage(title = "Getting Started",
+      
+      fluidRow(
+        tags$h4("Welcome to KBQ"),
+        tags$hr(),
+        tags$p("Loading components.. Please wait."),
+        tags$p("Checking connection to API server...")
+        # tags$p("Snapshots scheduling disabled")
+ 
+      )
+
+    ),easyClose = TRUE,fade=TRUE
+  )
+  
+  
   scheduleName<- reactiveValues(data = NULL)
   
   proxyError<-modalDialog(title = "Connection Error",
                           fluidPage(
                             fluidRow(
-                              tags$p("Fail to connect to API server at port:9500"),
-                              tags$p("Connection Error: Please Check Your proxy Settings or open the port:9500."),
-                              tags$p("Snapshots scheduling disabled")
+                              tags$p("Fail to connect to API server at port:8500"),
+                              tags$p("Connection Error: Please Check Your proxy Settings or open the port:8500."),
+                              tags$p("Notification: Snapshots scheduling disabled")
                             )
                             
                           )
                           
   )
   
-  load_data <- function() {
-    scheduleName$data<-getSchedulerNames()
-    hide("loading_page")
-    
-    show("main_content")
-  }
+  # load_data <- function() {
+  #   # scheduleName$data<-getSchedulerNames()
+  #   # hide("loading_page")
+  #   
+  #   # show("main_content")
+  # }
   
-  load_data()
+  # load_data()
+
+  
+  scheduleCheck <- reactiveValues(data = NULL)
+  
+  observe({
+    
+    # showModal(gettingStarted)
+    
+      style <- isolate("notification")
+      progress <- shiny::Progress$new(style = style)
+      progress$set(message = "Please Wait. Checking API Server Connection", value = 0)
+      # Close the progress when this reactive exits (even if there's an error)
+      on.exit(progress$close())
+
+     
+      # Create a closure to update progress.
+      # Each time this is called:
+      # - If `value` is NULL, it will move the progress bar 1/5 of the remaining
+      #   distance. If non-NULL, it will set the progress to that value.
+      # - It also accepts optional detail text.
+      updateProgress <- function(value = NULL, detail = NULL) {
+        if (is.null(value)) {
+          value <- progress$getValue()
+          value <- value +1# (progress$getMax() - value) / 5
+        }
+        progress$set(value = value, detail = detail)
+      }
+
+    
+
+      # Compute the new data, and pass in the updateProgress function so
+      # that it can update the progress indicator.
+      compute_data(updateProgress)
+    
+  
+     scheduleName$data<-getSchedulerNames()
+
+  })
+
+  
+
+  
   
   
   ##
@@ -104,6 +163,7 @@ shinyServer(function(input,output,session) {
   source("server-components/server-overview.R",local = TRUE)
   source("server-components/server-sparql.R",local = TRUE)
   source("server-components/server-validate.R",local = TRUE)
+
   source("server-components/server-collect.R",local = TRUE)
   source("server-components/server-analyze.R",local = TRUE)
   source("server-components/server-visualize.R",local = TRUE)

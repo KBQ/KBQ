@@ -17,7 +17,11 @@
 # 
 # You may contact the author of this code, Rifat Rashid, at <mohammad.rashid@polito.it>
 ## ==================================================================================== ##
+
 navbarMenu("-Visualize-",icon = icon("signal", lib = "glyphicon"),
+           # ## =========================================================================== ##
+           # ## Tabs for Scheduler data
+           # ## =========================================================================== ##
            
   tabPanel("-Using Scheduler-",icon = icon("th"),
        div(class="container",
@@ -35,8 +39,10 @@ navbarMenu("-Visualize-",icon = icon("signal", lib = "glyphicon"),
                                 uiOutput("uiSelInSchedulerNameVis"),
                                 actionButton("btnSchedulerViewData", "Visualize",icon("bar-chart-o"),
                                              class="btn btn-default btn-sm")
+                                ,tags$hr(),
+                                includeMarkdown("md/visIndexInstruction.md")
                               
-                            ),tags$hr()  
+                            )  
                             
                         ), # End side bar
                         column(8,
@@ -83,24 +89,39 @@ navbarMenu("-Visualize-",icon = icon("signal", lib = "glyphicon"),
                                tags$hr(),
                                
                                fluidRow(
-                                 column(6,
-                                        uiOutput("uiSchedule_graph_changes")),
-                                  column(6,
-                                         tags$span(class = "label label-default","Vairation in data changes based on entity count")
-                                           
-                                         )  
-                                 
+                                 column(10,
+                                        tags$span(class = "label label-default","Vairation in data 
+                                                  changes based on entity count"),
+                                        tags$br(),
+                                        tags$br(),
+                                        uiOutput("uiSchedule_graph_changes")
+                                        )
+                                                             
                                ),
                                fluidRow(
-                                 column(6,
-                                        uiOutput("uiSchedule_graph_growth")
-                                        
-                                       ),
-                                 column(6,
-                                        tags$span(class = "label label-default","Stability behaviour of a class based on entity count")
-                                        
-                                        )
-                                 )
+                                 column(10,tags$hr(),tags$h5("Summary statistics"))
+                               ),
+                               fluidRow(
+                                 tags$br(),
+                                 tags$br(),
+                                 
+                                 column(3,p(class = "label label-default","Entity Count:")),
+                                 
+                                 column(4,textOutput("VisSnapEntityCount")),
+                                 tags$hr(),
+                                 uiOutput("uiVisSnapshotsScheduleTable")
+                               )
+                               
+                               # fluidRow(
+                               #   column(6,
+                               #          uiOutput("uiSchedule_graph_growth")
+                               #          
+                               #         ),
+                               #   column(6,
+                               #          tags$span(class = "label label-default","Stability behaviour of a class based on entity count")
+                               #          
+                               #          )
+                               #   )
                                )     
                         ) # End main panel
                     )# End main
@@ -112,7 +133,7 @@ navbarMenu("-Visualize-",icon = icon("signal", lib = "glyphicon"),
 tabPanel("-Using Indexed KBs-",icon = icon("th"),
          
          # ## =========================================================================== ##
-         # ## Tabs for SPARQL Endpoint
+         # ## Tabs for Indexed KBS
          # ## =========================================================================== ##
          
          div(class="container",
@@ -120,34 +141,37 @@ tabPanel("-Using Indexed KBs-",icon = icon("th"),
              div(class="col-lg-3 col-md-3 col-sm-4",
                  # Side Bar
                  div(class="panel panel-default",""),# top line
-                 div(class="panel panel-default", 
-                     # Side bar header
-                     div(class="panel-heading","Indexed KBs")
-                 ),
+                
                  
                  div(class="list-group table-of-contents",
-                     
+                     div(class="panel panel-default", 
+                         # Side bar header
+                         div(class="panel-heading","Indexed KBs")
+                     ),
                      textInput("txtEndpoint_Indexed", "KB SPARQL Endpoint:", "http://patents.linkeddata.es/sparql",width = 400),
                      radioButtons("Kb_name", "Select Knowledge Base:",
-                                  c("Spanish DBpedia" = "<http://data.loupe.linked.es/dbpedia/es/1>",
-                                    "Aragon" = "<http://opendata.aragon.es/informes/>")),
+                                  c("Spanish DBpedia" = "<http://data.loupe.linked.es/dbpedia/es/1>")),
+                                    # "Aragon" = "<http://opendata.aragon.es/informes/>")),
                      actionButton("btnQueryIndexed", "Class Name",icon("bar-chart-o"),
                                   class="btn btn-default btn-sm"),
                      bsTooltip("btnQueryIndexed", "Extract class Name ",
                                "bottom", options = list(container = "body"))
-                 ),tags$hr()  
+                     ,tags$hr(),
+                     includeMarkdown("md/visIndexInstruction.md")
+                 )  
                  
              ), # End side bar
              column(8,
                     # Main Panel
                     div(class="panel panel-default",""),
-                    div(class="panel panel-default", 
-                        div(class="panel-heading","Visualize Indexed KBs")
-                    ),
                     div(class="list-group table-of-contents",
+                        div(class="panel panel-default", 
+                            div(class="panel-heading","Visualize Indexed KBs")
+                        ),
                         uiOutput("Indexed_classs_name_last")   
                     ),
                     tags$hr(),
+                    
                     
                     fluidRow(
                       column(10,
@@ -156,24 +180,29 @@ tabPanel("-Using Indexed KBs-",icon = icon("th"),
                              
                              uiOutput("Indexed_graph_changes")
                              )
-                      # column(6,
-                      #        tags$span(class = "label label-default","Vairation in data changes based on entity count")
-                      #        
-                      # )  
-                      
                     ),
                     fluidRow(
+                      column(10,tags$hr(),tags$h4("Summary statistics")),
+                      # column(3,p(class = "label label-default","Entity Count:")),
+                      # column(4,textOutput("VisIndexEntityCount")),
+                      tags$hr(),
+                      
                       column(10,
+                             uiOutput("uiVisIndexedScheduleTable")
+                             )
+                      
+                    ),
+                    
+                    fluidRow(
+                      column(10,
+                             tags$hr(),
                              tags$span(class = "label label-default","Stability behaviour of a 
                                        class based on entity count"),
                              
                              uiOutput("Indexed_graph_growth")
                              
                       )
-                      # column(6,
-                      #        tags$span(class = "label label-default","Stability behaviour of a class based on entity count")
-                      #        
-                      # )
+                
                     )
                    
              ) # End main panel

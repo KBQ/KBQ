@@ -924,16 +924,15 @@ output$approvalBox2 <- renderInfoBox({
  #   ggplotly(p)   
  # })
  
- analyzeCheck<-modalDialog(title = "Notification",
+analyzeCheck<-modalDialog(title = "Notification",
                          fluidPage(
                            fluidRow(
-                             # tags$p("Fail to connect to API server at port:9500"),
-                             # tags$p("Connection Error: Please Check Your proxy Settings or open the port:9500."),
+                             # tags$p("Fail to connect to API server at port:8500"),
+                             # tags$p("Connection Error: Please Check Your proxy Settings or open the port:8500."),
                              tags$p("Please Press Class Name and Select a class for Quality Profiling..")
                            )
                            
                          )
-                         
  )
  
  #---------------------------------------------------------#

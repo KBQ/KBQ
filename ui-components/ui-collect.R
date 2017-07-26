@@ -49,17 +49,7 @@ tabPanel("-Collect-",icon = icon("cog", lib = "glyphicon"),
                      textOutput("textNo_of_tripes"),
                      textOutput("textExecution_Updates"),
                      textOutput("textExecution_time"),
-                     # 
-                     # # div(class="col-lg-3 col-md-3 col-sm-3",
-                     # #     tags$span(class = "label label-default","Notification:")
-                     # ),
-                     # div(class="col-lg-6 col-md-6 col-sm-6",
-                     #     div(class="list-group table-of-contents",
-                             # textOutput("textNo_of_tripes"),
-                             # textOutput("textExecution_Updates"),
-                             # textOutput("textExecution_time")
-                     #     )
-                     # ),
+               
                      tags$hr(),
                      actionButton("btnSelectGraph_snapshots", "Graph",icon("paper-plane"), class="btn btn-default btn-sm"),
                      bsTooltip("btnSelectGraph_snapshots", "Extract Graph Names in the KB",

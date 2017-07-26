@@ -1,6 +1,10 @@
 # For indexed Query
 InR<- reactiveValues(data = NULL)
 
+
+indexDataVis<-reactiveValues(data=NULL)
+
+
 scheduleNameVis<- reactiveValues(data = NULL)
 
 scheduleData<-reactiveValues(data=NULL)
@@ -50,11 +54,27 @@ observeEvent(input$btnQueryIndexed, {
     
     # print(InR$data)
     
-     InC$data <- sparlQuery_className2(input$txtEndpoint,InR$data[nrow(InR$data),],input$Kb_name)
+    InC$data <- sparlQuery_className2(input$txtEndpoint,InR$data[nrow(InR$data),],input$Kb_name)
     
-    # print(InC$data)
+    if(input$Kb_name=="<http://data.loupe.linked.es/dbpedia/es/1>")
+    { 
+      if(file.exists("DQ/cacheDataEsDBpedia.rds"))
+        cacheData$data<-readRDS("DQ/cacheDataEsDBpedia.rds")
+      else{
+        cacheData$data<- sparqlQuery_extractAll(input$txtEndpoint,input$Kb_name)
+        # print(cacheData$data$className)
+        saveRDS(cacheData$data, "DQ/cacheDataEsDBpedia.rds")
+      }
+    }
+    
+   
+    indexDataVis$data<- subset(cacheData$data, className==input$InIndexed_className)    
+    
+    # print(indexDataVis$data)
   }
 })
+
+
 # For Indexed KB releases
 output$Indexed_classs_name_last <-renderUI({
   
@@ -65,7 +85,7 @@ output$Indexed_classs_name_last <-renderUI({
     return("Press Query Summary Statistics to extract data")
   }
   else{
-    selectInput("InIndexed_className","Current Version All Classes", transData$class, selected = NULL,selectize = TRUE, multiple = FALSE,width = 500)
+    selectInput("InIndexed_className","Class Name", transData$class, selected = NULL,selectize = TRUE, multiple = FALSE,width = 500)
   }
 })
 
@@ -76,7 +96,7 @@ output$Indexed_graph_changes <-renderUI({
   
   if(is.null(transData)){
     # h5("Press Summary Data to load Classess", '...', heigth=200, width=200)
-    return("Press Summary Statistics to Plot Class Changes based on entity Count")
+    return("")
   }
   else{
     if (is.null(input$InIndexed_className)) return("Data Extraction Error")
@@ -119,7 +139,7 @@ output$Indexed_graph_growth <-renderUI({
   
   if(is.null(transData)){
     # h5("Press Summary Data to load Classess", '...', heigth=200, width=200)
-    return("Press Summary Statics to plot KnowlegeBase growth")
+    return("")
   }
   else{
     if (is.null(input$InIndexed_className)) return("Data Extraction Error")
@@ -238,7 +258,7 @@ observeEvent(input$btnSchedulerViewData,{
     showModal(schedulerError)
   }else{
   scheduleName<-input$SelInSchedulerNameVis
-    
+  
   # parm<-paste("http://178.62.126.59:8500/","readCSV?filename=",scheduleName,".csv",sep = "")
   
   parm<-paste("http://178.62.126.59:8500/","getSchedulerResults?filename=",scheduleName,".csv",sep = "")
@@ -296,7 +316,7 @@ output$schedulerDataView <- DT::renderDataTable({
 })
 
 output$scheduleClassName<-renderText({
-  print(scheduleData$data)
+  # print(scheduleData$data)
   if(is.null(scheduleData$data))
     return("Select a scheduler and press visualize")
   else
@@ -335,7 +355,7 @@ output$uiSchedule_graph_changes <-renderUI({
   
   if(is.null(transData)){
     # h5("Press Summary Data to load Classess", '...', heigth=200, width=200)
-    return("Press Summary Statistics to Plot Class Changes based on entity Count")
+    return("")
   }
   else{
        plotOutput("ScheduleindexPlot")
@@ -415,3 +435,83 @@ output$ScheduleGrowthPlot<-renderPlot({
 # })
 
 
+ ####################### Updated Sections ###############
+ 
+ output$VisSnapEntityCount<-renderText({
+   if(!is.null(scheduleData$data)){
+     transData<-scheduleData$data[1,]$Count
+   }
+ })
+ 
+ output$VisIndexEntityCount<-renderText({
+     return("TEst")
+ })
+ 
+ 
+ 
+ output$uiVisSnapshotsScheduleTable <- renderUI({ 
+   withSpinner(DT::dataTableOutput("VisSnapshotsScheduleTable"))
+ })
+ 
+ output$VisSnapshotsScheduleTable <- DT::renderDataTable({
+   transData<-scheduleData$data
+   if(is.null(transData)){ return ()}
+   
+   drops <- c("className","Indexed","Count","result")
+   
+   transData<-transData[ , !(names(transData) %in% drops)]
+   
+   # names(transData)[names(transData)=="Release.x"] <- "Release(n)"
+   
+   # if(ncol(transData)<6)
+   #   transData<-sd$data[,c(1,2,3,5)]
+   # else
+   #   transData<-sd$data[,c(1,2,3,6)]
+   
+   if("grpah" %in% names(transData)){
+     drops <- c("Graph")
+     transData<-transData[ , !(names(transData) %in% drops)]
+   }
+   
+    names(transData)[names(transData)=="p"] <- "Property"
+    names(transData)[names(transData)=="freq"] <- "Instance Count"
+   # names(transData)[names(transData)=="Count"] <- "Entity Count"
+   
+   return(transData)
+   
+ },options = list(pageLength = 10, autoWidth = FALSE),rownames= FALSE, selection="none")
+ 
+ output$uiVisIndexedScheduleTable <- renderUI({ 
+   withSpinner(DT::dataTableOutput("VisIndexedScheduleTable"))
+ })
+ 
+ 
+ output$VisIndexedScheduleTable <- DT::renderDataTable({
+   transData<- InC$data
+   if(is.null(transData)){ return ()}
+   
+   # drops <- c("className","Indexed","Count","result")
+   # 
+   # transData<-transData[ , !(names(transData) %in% drops)]
+   # 
+   # # names(transData)[names(transData)=="Release.x"] <- "Release(n)"
+   # 
+   # # if(ncol(transData)<6)
+   # #   transData<-sd$data[,c(1,2,3,5)]
+   # # else
+   # #   transData<-sd$data[,c(1,2,3,6)]
+   # 
+   # if("grpah" %in% names(transData)){
+   #   drops <- c("Graph")
+   #   transData<-transData[ , !(names(transData) %in% drops)]
+   # }
+   # 
+   # names(transData)[names(transData)=="p"] <- "Property"
+   # names(transData)[names(transData)=="freq"] <- "Instance Count"
+   # # names(transData)[names(transData)=="Count"] <- "Entity Count"
+   
+   return(transData)
+   
+ },options = list(pageLength = 10, autoWidth = FALSE),rownames= FALSE, selection="none")
+ 
+ 

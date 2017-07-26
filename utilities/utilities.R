@@ -97,7 +97,7 @@ compute_data <- function(updateProgress = NULL) {
   
   # If we were passed a progress update function, call it
   if (is.function(updateProgress)) {
-    text <- paste0("data:", round(new_row$x, 2), " process:", round(new_row$y, 2))
+    text <-paste0("Loading components..It may takes few secs.") #paste0("data:", round(new_row$x, 2), " process:", round(new_row$y, 2))
     updateProgress(detail = text)
   }
   
@@ -134,3 +134,6 @@ addDeps <- function(x) {
   
   shinydashboard:::appendDependencies(x, dashboardDeps)
 }
+
+
+

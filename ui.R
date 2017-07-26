@@ -33,30 +33,30 @@ tagList(
   ),
   ui<- fluidPage(
     useShinyjs(),
-    div(
-      id = "loading_page",
-      HTML("
-       <div class=\"col-lg-2 col-md-2 col-sm-2\">
-  
-       </div>
-       <div class=\"col-lg-3 col-md-3 col-sm-4\">
-          <div style=\"display:table-cell; vertical-align:middle; text-align:center\">
-             <img src=\"loader3.gif\">
-         </div>
-       </div>
-        <div class=\"col-lg-3 col-md-3 col-sm-4\">
-            
-            <h4 style=\"display:table-cell; vertical-align:middle; text-align:center\"> Connecting to api server... </h4>
-        </div>
-      </div>   
-           
-      ")
-      
-    ),
+    # div(
+    #   id = "loading_page",
+      # HTML("
+      #  <div class=\"col-lg-2 col-md-2 col-sm-2\">
+      # 
+      #  </div>
+      #  <div class=\"col-lg-3 col-md-3 col-sm-4\">
+      #     <div style=\"display:table-cell; vertical-align:middle; text-align:center\">
+      #        <img src=\"loader3.gif\">
+      #    </div>
+      #  </div>
+      #   <div class=\"col-lg-3 col-md-3 col-sm-4\">
+      # 
+      #       <h4 style=\"display:table-cell; vertical-align:middle; text-align:center\"> Connecting to api server... </h4>
+      #   </div>
+      # </div>
+      # 
+      # ")
+    #   
+    # ),
     
-    hidden(
-      div(
-        id = "main_content",
+    # hidden(
+    #   div(
+    #     id = "main_content",
       
     tags$style(type="text/css", "body {padding-top: 110px;} .navbar {padding-left: 110px;}"),
     tags$style(type="text/css", ".modal-lg { width: 90%;}"),
@@ -108,8 +108,8 @@ tagList(
     ) # end navbarpage
    ) # end taglist
 
-  ) # main-content
- ) # end hidden
+ #  ) # main-content
+ # ) # end hidden
 )
 
 # Attach dependencies
