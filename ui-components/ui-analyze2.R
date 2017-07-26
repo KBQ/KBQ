@@ -323,9 +323,9 @@ tabPanel("-Using KB Snapshots Dataset-",icon = icon("th"),
                                    
                                    </div>
                                    "      )
-                                 ),
-                                 actionLink("link_to_tabpanel_validateSnap",HTML("
-                                  <h5 class=\"list-group-item-heading\">Validate Quality Issues</h5>"),class="list-group-item")
+                                 )
+                             #     actionLink("link_to_tabpanel_validateSnap",HTML("
+                             #      <h5 class=\"list-group-item-heading\">Validate Quality Issues</h5>"),class="list-group-item")
                              )
                             
                            

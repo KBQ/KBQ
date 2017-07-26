@@ -1302,8 +1302,8 @@ analyzeCheck<-modalDialog(title = "Notification",
      # print(st)
      qd$data<-st
      qp$data<-st
-     if(nrow(CompletenessMeasure_property_with_issues(qp$data))!=0)
-       table_data$DT<-ReadData(CompletenessMeasure_property_with_issues(qp$data))
+     # if(nrow(CompletenessMeasure_property_with_issues(qp$data))!=0)
+     #   table_data$DT<-ReadData(CompletenessMeasure_property_with_issues(qp$data))
      # qd$data<-
      # print(CompletenessMeasure_property_with_issues(qp$data))
    }
@@ -1325,12 +1325,37 @@ analyzeCheck<-modalDialog(title = "Notification",
      content = 
        function(file)
        {
-         # tempReport <-  "report/report_file.Rmd"
+         style <- isolate("notification")
+         progress <- shiny::Progress$new(style = style)
+         progress$set(message = "Please Wait... Generating Report", value = 0)
+         # Close the progress when this reactive exits (even if there's an error)
+         on.exit(progress$close())
+         
+         
+         # Create a closure to update progress.
+         # Each time this is called:
+         # - If `value` is NULL, it will move the progress bar 1/5 of the remaining
+         #   distance. If non-NULL, it will set the progress to that value.
+         # - It also accepts optional detail text.
+         updateProgress <- function(value = NULL, detail = NULL) {
+           if (is.null(value)) {
+             value <- progress$getValue()
+             value <- value +1# (progress$getMax() - value) / 5
+           }
+           progress$set(value = value, detail = detail)
+         }
+         
+         
+         
+         # Compute the new data, and pass in the updateProgress function so
+         # that it can update the progress indicator.
+         compute_data(updateProgress)
+         tempReport <-  "report/report_file.Rmd"
          # file.copy("report.Rmd", tempReport, overwrite = TRUE)
-         setwd('/srv/shiny-server/KBQ/report')
-         tempReport <- file.path(getwd(), "report_file.Rmd")
+         # setwd('/srv/shiny-server/KBQ/report')
+         # tempReport <- file.path(getwd(), "report_file.Rmd")
          # tempReport <- file.path(getwd(), "report/report_file.Rmd")
-         file.copy("report.Rmd", tempReport, overwrite = TRUE)
+         file.copy("report/report.Rmd", tempReport, overwrite = TRUE)
          
          params <- list( perPlot= plot_persistency_data(qd$data),
                          perTable= reportPersistency(qd$data),
@@ -1434,11 +1459,38 @@ analyzeCheck<-modalDialog(title = "Notification",
      content = 
        function(file)
        {
-          tempReport <-  "./report/report_file.Rmd"
+         style <- isolate("notification")
+         progress <- shiny::Progress$new(style = style)
+         progress$set(message = "Please Wait.Generating Report", value = 0)
+         # Close the progress when this reactive exits (even if there's an error)
+         on.exit(progress$close())
+         
+         
+         # Create a closure to update progress.
+         # Each time this is called:
+         # - If `value` is NULL, it will move the progress bar 1/5 of the remaining
+         #   distance. If non-NULL, it will set the progress to that value.
+         # - It also accepts optional detail text.
+         updateProgress <- function(value = NULL, detail = NULL) {
+           if (is.null(value)) {
+             value <- progress$getValue()
+             value <- value +1# (progress$getMax() - value) / 5
+           }
+           progress$set(value = value, detail = detail)
+         }
+         
+         
+         
+         # Compute the new data, and pass in the updateProgress function so
+         # that it can update the progress indicator.
+         compute_data(updateProgress)
+         
+         
+         tempReport <-  "./report/report_file.Rmd"
          # file.copy("report.Rmd", tempReport, overwrite = TRUE)
          # 
          # tempReport <- file.path(getwd(), "report/report_file.Rmd")
-         file.copy("report.Rmd", tempReport, overwrite = TRUE)
+         file.copy("./report/report.Rmd", tempReport, overwrite = TRUE)
 
          params <- list( perPlot= plot_persistency_data(qd$data),
                          perTable= reportPersistency(qd$data),
