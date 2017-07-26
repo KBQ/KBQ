@@ -346,7 +346,7 @@ output$completenessSummaryBoxModel <- renderInfoBox({
     x<-0.0
   }
   else{
-    x<- tryCatch(CompletenessMeasure(transData), error = function(e) return(0.0))  
+    x<- tryCatch(nrow(CompletenessMeasure(transData)), error = function(e) return(0.0))  
     
     # print(x)
     
@@ -1312,16 +1312,16 @@ analyzeCheck<-modalDialog(title = "Notification",
  
  output$downloadMeasure <- 
    downloadHandler(
-     
-     filename = function() {
-       
-       st<-paste(Sys.Date(),"-",sep = "")
-       if(is.null(input$SelIClassData)) {
-         paste(st, "QualityProblemReport.html", sep='')
-       }else{
-         paste(st, "QualityProblemReport", '.html', sep='')
-       }
-     },
+     filename = "report.html",
+     # filename = function() {
+     #   
+     #   st<-paste(Sys.Date(),"-",sep = "")
+     #   if(is.null(input$SelIClassData)) {
+     #     paste(st, "QualityProblemReport.html", sep='')
+     #   }else{
+     #     paste(st, "QualityProblemReport", '.html', sep='')
+     #   }
+     # },
      content = 
        function(file)
        {
@@ -1350,12 +1350,20 @@ analyzeCheck<-modalDialog(title = "Notification",
          # Compute the new data, and pass in the updateProgress function so
          # that it can update the progress indicator.
          compute_data(updateProgress)
-         tempReport <-  "report/report_file.Rmd"
+         
+         # tempReport <-  "/report/report_file.Rmd"
          # file.copy("report.Rmd", tempReport, overwrite = TRUE)
          # setwd('/srv/shiny-server/KBQ/report')
-         # tempReport <- file.path(getwd(), "report_file.Rmd")
+          # tempReport <- file.path(getwd(), "report_file.Rmd")
+         
+         # owd <- setwd(tempdir())
+         # on.exit(setwd(owd))
+         
          # tempReport <- file.path(getwd(), "report/report_file.Rmd")
-         file.copy("report/report.Rmd", tempReport, overwrite = TRUE)
+         # file.copy("/report/report.Rmd", tempReport, overwrite = TRUE)
+         
+         tempReport <- file.path(tempdir(), "report.Rmd")
+         file.copy("report.Rmd", tempReport, overwrite = TRUE)
          
          params <- list( perPlot= plot_persistency_data(qd$data),
                          perTable= reportPersistency(qd$data),
@@ -1446,16 +1454,16 @@ analyzeCheck<-modalDialog(title = "Notification",
  
  output$downloadMeasureIndexed <- 
    downloadHandler(
-  
-        filename = function() {
-
-           st<-paste(Sys.Date(),"-",sep = "")
-           if(is.null(input$SelIClassData)) {
-             paste(st, "QualityProblemReport.html", sep='')
-           }else{
-              paste(st, input$SelIClassData, '.html', sep='')
-           }
-         },
+     filename = "report.html",
+        # filename = function() {
+        # 
+        #    st<-paste(Sys.Date(),"-",sep = "")
+        #    if(is.null(input$SelIClassData)) {
+        #      paste(st, "QualityProblemReport.html", sep='')
+        #    }else{
+        #       paste(st, input$SelIClassData, '.html', sep='')
+        #    }
+        #  },
      content = 
        function(file)
        {
@@ -1485,12 +1493,14 @@ analyzeCheck<-modalDialog(title = "Notification",
          # that it can update the progress indicator.
          compute_data(updateProgress)
          
+         tempReport <- file.path(tempdir(), "report.Rmd")
+         file.copy("report.Rmd", tempReport, overwrite = TRUE)
          
-         tempReport <-  "./report/report_file.Rmd"
-         # file.copy("report.Rmd", tempReport, overwrite = TRUE)
-         # 
-         # tempReport <- file.path(getwd(), "report/report_file.Rmd")
-         file.copy("./report/report.Rmd", tempReport, overwrite = TRUE)
+         # tempReport <-  "./report/report_file.Rmd"
+         # # file.copy("report.Rmd", tempReport, overwrite = TRUE)
+         # # 
+         # # tempReport <- file.path(getwd(), "report/report_file.Rmd")
+         # file.copy("./report/report.Rmd", tempReport, overwrite = TRUE)
 
          params <- list( perPlot= plot_persistency_data(qd$data),
                          perTable= reportPersistency(qd$data),

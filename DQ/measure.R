@@ -110,7 +110,7 @@ CompletenessMeasure<-function(propertylist){
     print(Release)
     
     lastDep=st[st$Release==Release[length(Release)],]
-    # print(lastDep)
+    # print(lastDep)565
     prevDep=st[st$Release==Release[length(Release)]-1,]
     
     Merge=merge(x=lastDep, y=prevDep, by="Property", all = TRUE)
