@@ -356,6 +356,9 @@ output$responses <- DT::renderDataTable({
       # if(!is.null(show2))
       # names(show)[names(show)=="Release.x"] <- "Release"
       # 
+     if(is.null(table_data$DT))
+       table_data$DT=data.frame(Property="No error found")
+     else   
      table_data$DT
       
     
