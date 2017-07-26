@@ -352,6 +352,7 @@ output$responses <- DT::renderDataTable({
     # print(show)
    }else{
       show<-table_data$DT
+      if(!is.null(show))
       names(show)[names(show)=="Release.x"] <- "Release"
       show
     
