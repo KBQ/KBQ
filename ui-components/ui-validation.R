@@ -47,7 +47,7 @@ tabPanel("-Validate-",icon = icon("repeat", lib = "glyphicon"),
                         div(class="panel panel-default", 
                             div(class="panel-heading","Properties With Completeness Issues")
                         ),
-                        DT::dataTableOutput("responses", height = 200),
+                        uiOutput("uiResponse"),
                         tags$hr()
                         
                         

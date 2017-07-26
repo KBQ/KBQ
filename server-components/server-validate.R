@@ -337,6 +337,15 @@ observeEvent(input$responses_rows_selected, {
   
 })
 
+# DT::dataTableOutput("responses", height = 200),
+
+output$uiResponse <- renderUI({ 
+  if(is.null(table_data$DT)){
+    return()
+  }else{
+  withSpinner(DT::dataTableOutput("responses"))}
+})
+
 output$responses <- DT::renderDataTable({
   
   #update after submit is clicked
