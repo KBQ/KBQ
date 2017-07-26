@@ -53,14 +53,50 @@ You may use this app by
 
 For periodic data extraction we have created a set of REST API. We use this API to create scheduler in the hosting server based on the selected class. Details API documentation presented in the github: https://github.com/rifat963/KbDataObservetory
 
+**Instructions for building scheduler**
 
-#### Analyze
+- **Input** Input a KB SPARQL endpoint url. For exmaple we present 3cixty KB SPARQL endpoint.
+
+- **Graph** Press button *Graph* to extract available grpahs present in the KB
+
+- **Class Name** Press button *Class Name* to extract all available classes present in the KB. It is mendatory to select a Class Name for snapshots generation due to quality profiling is done based on selected class.
+
+- **Create a New Scheduler** Input a schulder name and set a time for daily scheduling task. Press button *Create Scheduler* to start the schulder in the server. 
+
+- **Save** Manually save snapshots data in a CSV file. 
+
+- **Notification** Please view the notification before creating the schulder.
+
+
+### Analyze
 
 Purpose of KBQ is to automatic analysis of quality profiling of any KB using sparql endpoint. Profiling is based on the four quality characteristics. Following are the steps used to performed quality profiling.
 
 - For indexed KBs: Select a class by using **ClassName**. Then start quality profiling simple click ** Quality Profiling**. Results can be visualize after computing data finished.
 
 - For sanapshots dataset: Select a scheduler from the lisit and press **Visualize**. 
+
+More details instruction:
+
+**Instructions for indexed KBs**
+
+- **Input** We present two KB DBpedia ES as Inded KB. Select a KB for Data Extraction.
+
+- **Class Name** Press button *Class Name* to extract all available classes present in the selected KB. It is mendatory to select a Class Name  due to quality profiling is done based on selected class
+
+- **Quality Measures Results** Details quality profiling results can be viewed through each quality measure names. 
+
+- **Save** Save quality profiling results in a HTML file.
+
+**Instructions for snapshots datasets**
+
+- **Input** Select a scheduler name from the list or upload local save snapshots CSV for quality profiling. 
+
+- **Class Name** Press button *Class Name* to extract all available classes present in the selected KB. It is mendatory to select a Class Name  due to quality profiling is done based on selected class
+
+- **Quality Profile** Using scheduler press button *Quality Profile* for quality profiling results. Details quality profiling results can be viewed through each quality measure names. 
+
+- **Save** Save quality profiling results in a HTML file.
 
 ### Visualize
 
@@ -70,14 +106,32 @@ Visualization is performed using two seperate stage.
 
 - Quality profiling specific visualization: Based on the quality characteriscs measure results a set of indicators is used to notify the end users for quality profiling results.
 
+**Instructions for Indexed KB**
+
+- **Input** We present two KB DBpedia ES as Inded KB. Select a KB for Data Extraction.
+
+- **Class Name** Press button *Class Name* to extract all available classes present in the selected KB. It is mendatory to select a Class Name to explore Indexed dataset.
+
+- **Summary Statistics** Preview summary statistics presented in the table.  
+
+**Instructions for Snapshots Datasets**
+
+- **Input** Select a scheduler name from the list or upload local save snapshots CSV for quality profiling. 
+
+- **Class Name** Press button *Class Name* to extract all available classes present in the selected KB. It is mendatory to select to explore schedule
 
 ### Validate
 
-- List of quality properties with completeness issues presented in the validation module. 
+This module extracts, inspects and comment on instances with quality issues. An end user can extract properties with quality issue after performing quality profiling. It performs validation in four steps: 
 
-- For validation user need to select a properties followed by extract instances of that property.
+**Incomplete properties:** list of properties with completeness quality issues for validation. 
 
-- By selecting each instance user can explore subject and sources. If the instance is present in the KB however it is missing in the sources there is a completeness issue present for the instance.
+**Instances:** quality profiling is done based on summary statistics. To detect the missing instances of a property, instance extraction component perform comparison between the list of instances of two version. 
+
+**Inspections:** after the instance, extraction is done any user can select every instance for inspection and report. 
+
+**Report:** an end user can report if the instance is true positive (the subject presents an issue, and an actual problem was detected) or false positive (the item presents a possible issue, but none actual problem is found), as well as an end user can comment on specific issues. Finally, an end user can save the validation report in a CSV file. Currently, validation module is only performed for DBpedia ES.
+
 
 #### Licence
 These scripts are free software; you can redistribute it and/or modify it under the terms of the GNU General Public License published by

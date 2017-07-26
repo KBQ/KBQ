@@ -26,10 +26,14 @@ tabPanel("-Validate-",icon = icon("repeat", lib = "glyphicon"),
          div(class="container",
              div(class="panel panel-default",""),
              div(class="panel panel-default", 
-                 div(class="panel-heading","What is property validation ?"),
+                 div(class="panel-heading","Validation Approach"),
                  div(class="panel-body", 
                      includeMarkdown("md/Analyze_changes.md")
-                 )
+                 ),
+                 actionLink("link_to_tabpanel_Indexanalyze",HTML("
+                                <h5 class=\"list-group-item-heading\">Analyze Quality Isseues</h5>
+                                <h6>Perform quality analysis to extract properties with quality issues.</h6>                                        "),
+                            class="list-group-item")
                )
              ),
          
@@ -37,14 +41,17 @@ tabPanel("-Validate-",icon = icon("repeat", lib = "glyphicon"),
              column(8,
                     # Main Panel
                     div(class="panel panel-default",""),
-                    div(class="panel panel-default", 
-                        div(class="panel-heading","Properties With Completeness Issues")
-                    ),
+                   
                     
                     div(class="list-group table-of-contents",
-                        DT::dataTableOutput("responses", height = 200) 
+                        div(class="panel panel-default", 
+                            div(class="panel-heading","Properties With Completeness Issues")
+                        ),
+                        DT::dataTableOutput("responses", height = 200),
+                        tags$hr()
                         
-                    ),tags$hr() 
+                        
+                    )
                     # div(class="panel panel-default", 
                     #     div(class="panel-heading","Selected Property")
                     # ),
@@ -60,12 +67,13 @@ tabPanel("-Validate-",icon = icon("repeat", lib = "glyphicon"),
              div(class="col-lg-3 col-md-3 col-sm-4",
                  # Side Bar
                  div(class="panel panel-default",""),# top line
-                 div(class="panel panel-default", 
-                     # Side bar header
-                     div(class="panel-heading","Validation")
-                 ),
+                 
                  
                  div(class="list-group table-of-contents",
+                     div(class="panel panel-default", 
+                         # Side bar header
+                         div(class="panel-heading","Validation")
+                     ),
                      shinyjs::useShinyjs(),
                      textInput("txtIn_eval_SparqlEndpoint", "SPARQL Endpoint:","http://es.dbpedia.org/sparql"),
                      shinyjs::disabled(textInput("Property", "Selected Property Name")),

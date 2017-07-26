@@ -22,7 +22,6 @@ query_analyzed_instance_count<-function(endpoint,className,Property){
 #   ?s  <http://dbpedia.org/ontology/bibsysId> ?o .
 #   ?s a <http://xmlns.com/foaf/0.1/Person> .
 # }
-# 
 
 query_analyzed<-function(endpoint,className,Property,limit){
   

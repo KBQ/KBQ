@@ -1328,7 +1328,7 @@ analyzeCheck<-modalDialog(title = "Notification",
          # tempReport <-  "report/report_file.Rmd"
          # file.copy("report.Rmd", tempReport, overwrite = TRUE)
          setwd('/srv/shiny-server/KBQ/report')
-         tempReport <- file.path(getwd(), "report/report_file.Rmd")
+         tempReport <- file.path(getwd(), "report_file.Rmd")
          # tempReport <- file.path(getwd(), "report/report_file.Rmd")
          file.copy("report.Rmd", tempReport, overwrite = TRUE)
          

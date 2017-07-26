@@ -51,10 +51,11 @@ output$responses_query <- DT::renderDataTable({
     
     # print(dt)
     # dt$link <- createLink(dt$Property)
-    
+    names(dt)[names(dt)=="s"] <- "Subject"
     dt[,c(1,3,4)]
+    
   }
-}, server = FALSE, selection = "single"
+}, server = FALSE, selection = "single",rownames=F
 
 )
 
@@ -181,7 +182,7 @@ output$Valdata <- DT::renderDataTable({
   show<-data.frame(Property=unique(query_data_save$data$Property),Instances=unique(query_data_save$data$Instances))
   show
   
-}, options=list(dom='t',ordering=F),selection="none",row.names=F
+}, options=list(dom='t',ordering=F),selection="none",rownames=F
 
 )
 
@@ -199,7 +200,9 @@ output$download_ValData<-downloadHandler(
       # repSt=gsub(".*#", "", input$SelIClassData_snapshots)
       # 
       # repSt=gsub(">", "", repSt)
-      paste(st, input$SelIClassData, '.json', sep='')
+      paste(st, "ValidationReport", '.csv', sep='')
+      
+      # paste(st, input$SelIClassData, '.json', sep='')
     }
   },
   content = function(file) {
@@ -207,13 +210,14 @@ output$download_ValData<-downloadHandler(
     # transdata<-CompletenessMeasure_last_two_dep(qp$data)
     # properties<-toJSON(transdata)
     # entities<-toJSON(qd$data)
-    
+
     # jsonl <- list(properties, entities)
-    jsonc <- toJSON(query_data_save$data)
+    # jsonc <- toJSON(query_data_save$data)
+    # 
+    # print(jsonc)
+    # write(jsonc, file )
     
-    print(jsonc)
-    write(jsonc, file )
-    # write.csv(sd$data, file, row.names = FALSE)
+    write.csv(query_data_save$data, file, row.names = FALSE)
   }
   
 )
@@ -343,12 +347,17 @@ output$responses <- DT::renderDataTable({
   if(!is.null(upload_data_val$data)){
     
     show<-data.frame(Property=unique(upload_data_val$data$Property),Instances=unique(upload_data_val$data$Instances))
+
     table_data$DT=show
     # print(show)
-  }else{
-    table_data$DT}
+   }else{
+      show<-table_data$DT
+      names(show)[names(show)=="Release.x"] <- "Release"
+      show
+    
+    }
   
-}, server = FALSE, selection = "single"
+}, server = FALSE, selection = "single",rownames=F
 )
 
 # ## =========================================================================== ##
@@ -435,4 +444,6 @@ modalAnalyze<-modalDialog( title = "Explore Instances",
 #   
 # })
 
-
+observeEvent(input$link_to_tabpanel_Indexanalyze, {
+  updateTabsetPanel(session, "nav-main", "-Using Indexed KBs Dataset-")
+})

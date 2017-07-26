@@ -38,7 +38,7 @@ shinyServer(function(input,output,session) {
   
   getSchedulerNames<-function(){
     
-    parm<-paste("http://178.62.126.59:8500/readSchedulerIndex",sep = "")
+    parm<-paste("http://178.62.126.59:9500/readSchedulerIndex",sep = "")
     
     # if(!url.exists("http://178.62.126.59:8500/getAllCornList")){
     #   
@@ -85,8 +85,8 @@ shinyServer(function(input,output,session) {
   proxyError<-modalDialog(title = "Connection Error",
                           fluidPage(
                             fluidRow(
-                              tags$p("Fail to connect to API server at port:8500"),
-                              tags$p("Connection Error: Please Check Your proxy Settings or open the port:8500."),
+                              tags$p("Fail to connect to API server at port:9500"),
+                              tags$p("Connection Error: Please Check Your proxy Settings or open the port:9500."),
                               tags$p("Notification: Snapshots scheduling disabled")
                             )
                             
@@ -163,7 +163,6 @@ shinyServer(function(input,output,session) {
   source("server-components/server-overview.R",local = TRUE)
   source("server-components/server-sparql.R",local = TRUE)
   source("server-components/server-validate.R",local = TRUE)
-
   source("server-components/server-collect.R",local = TRUE)
   source("server-components/server-analyze.R",local = TRUE)
   source("server-components/server-visualize.R",local = TRUE)
