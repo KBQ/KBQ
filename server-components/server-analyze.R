@@ -1325,7 +1325,11 @@ analyzeCheck<-modalDialog(title = "Notification",
      content = 
        function(file)
        {
-         tempReport <-  "report/report_file.Rmd"
+         # tempReport <-  "report/report_file.Rmd"
+         # file.copy("report.Rmd", tempReport, overwrite = TRUE)
+         setwd('/srv/shiny-server/KBQ/report')
+         tempReport <- file.path(getwd(), "report/report_file.Rmd")
+         # tempReport <- file.path(getwd(), "report/report_file.Rmd")
          file.copy("report.Rmd", tempReport, overwrite = TRUE)
          
          params <- list( perPlot= plot_persistency_data(qd$data),
@@ -1430,7 +1434,10 @@ analyzeCheck<-modalDialog(title = "Notification",
      content = 
        function(file)
        {
-         tempReport <-  "report/report_file.Rmd"
+          tempReport <-  "./report/report_file.Rmd"
+         # file.copy("report.Rmd", tempReport, overwrite = TRUE)
+         # 
+         # tempReport <- file.path(getwd(), "report/report_file.Rmd")
          file.copy("report.Rmd", tempReport, overwrite = TRUE)
 
          params <- list( perPlot= plot_persistency_data(qd$data),
