@@ -29,11 +29,11 @@ tabPanel("-Validate-",icon = icon("repeat", lib = "glyphicon"),
                  div(class="panel-heading","Validation Approach"),
                  div(class="panel-body", 
                      includeMarkdown("md/Analyze_changes.md")
-                 )
-                 # actionLink("link_to_tabpanel_Indexanalyze",HTML("
-                 #                <h5 class=\"list-group-item-heading\">Analyze Quality Isseues</h5>
-                 #                <h6>Perform quality analysis to extract properties with quality issues.</h6>                                        "),
-                 #            class="list-group-item")
+                 ),
+                 actionLink("link_to_tabpanel_Indexanalyze",HTML("
+                                <h5 class=\"list-group-item-heading\">Analyze Quality Isseues</h5>
+                                <h6>Perform quality analysis to extract properties with quality issues.</h6>                                        "),
+                            class="list-group-item")
                )
              ),
          
@@ -46,10 +46,10 @@ tabPanel("-Validate-",icon = icon("repeat", lib = "glyphicon"),
                     div(class="list-group table-of-contents",
                         div(class="panel panel-default", 
                             div(class="panel-heading","Properties With Completeness Issues")
-                        )
-                        # uiOutput("uiResponse"),
+                        ),
+                        uiOutput("uiResponse"),
                         # uiOutput("uiResponse2"),
-                        # tags$hr()
+                        tags$hr()
                         
                         
                     )
