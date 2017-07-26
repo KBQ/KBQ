@@ -48,6 +48,7 @@ tabPanel("-Validate-",icon = icon("repeat", lib = "glyphicon"),
                             div(class="panel-heading","Properties With Completeness Issues")
                         ),
                         uiOutput("uiResponse"),
+                        # uiOutput("uiResponse2"),
                         tags$hr()
                         
                         

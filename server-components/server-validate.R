@@ -340,6 +340,7 @@ observeEvent(input$responses_rows_selected, {
 # DT::dataTableOutput("responses", height = 200),
 
 output$uiResponse <- renderUI({ 
+  print(table_data$DT)
   if(is.null(table_data$DT)){
     return()
   }else{
@@ -352,27 +353,27 @@ output$responses <- DT::renderDataTable({
   # input$submit
   #update after delete is clicked
   # input$delete
-  tryCatch(
-  # if(!is.null(upload_data_val$data)){
+  # tryCatch(
+  # # if(!is.null(upload_data_val$data)){
+  # #   
+  # #   show<-data.frame(Property=unique(upload_data_val$data$Property),Instances=unique(upload_data_val$data$Instances))
+  # # 
+  # #   table_data$DT=show
+  # #   # print(show)
+  # #  }else{
+  #    
+  #     # 
+  #     # if(!is.null(show2))
+  #     # names(show)[names(show)=="Release.x"] <- "Release"
+  #     # 
+  #    # if(is.null(table_data$DT))
+  #    #   table_data$DT=data.frame(Property="No error found")
+  #    # else   
+  #     table_data$DT
+  #     
   #   
-  #   show<-data.frame(Property=unique(upload_data_val$data$Property),Instances=unique(upload_data_val$data$Instances))
-  # 
-  #   table_data$DT=show
-  #   # print(show)
-  #  }else{
-     
-      # 
-      # if(!is.null(show2))
-      # names(show)[names(show)=="Release.x"] <- "Release"
-      # 
-     if(is.null(table_data$DT))
-       table_data$DT=data.frame(Property="No error found")
-     else   
-     table_data$DT
-      
-    
-    # }
-  , error = function(e) NULL)
+  #   # }
+  # , error = function(e) NULL)
 }, server = FALSE, selection = "single",rownames=F
 )
 

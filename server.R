@@ -158,6 +158,7 @@ shinyServer(function(input,output,session) {
   upload_data_val<-reactiveValues(data=NULL)
   #For property datasets
   qp <- reactiveValues(data = NULL)
+  
   table_data<-reactiveValues(DT=NULL)
   
   source("server-components/server-overview.R",local = TRUE)
