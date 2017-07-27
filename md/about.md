@@ -2,6 +2,6 @@
 
 - *Powered By* [Loupe](http://loupe.linkeddata.es/loupe/)
 
-- *Built with* [Shiny dashboard](https://rstudio.github.io/shinydashboard/),[Plotly](https://plot.ly/)
+- *Built with* [Shiny](https://shiny.rstudio.com/),[Plotly](https://plot.ly/)
 
 - *Bootstrap theme* [Yeti](https://bootswatch.com/yeti/)

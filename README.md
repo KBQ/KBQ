@@ -16,12 +16,11 @@ To run this app locally on your machine, download R or RStudio and run the follo
 
 ```
 install.packages(c("ggplot2", "dplyr", "plyr", 
-"dtplyr", "plotly","SPARQL",
-"rmarkdown","DT","readr","data.table",
-"shinyjs","shiny","shinydashboard",
-"shinythemes","stringr","jsonlite","gtools",
-"htmltools","httr","shinyTime","shinyBS","RCurl",
-"ggthemes","shinycssloaders","knitr"))
+"dtplyr", "plotly","SPARQL","rmarkdown",
+"DT","readr","data.table","shinyjs","shiny",
+"shinydashboard","shinythemes","stringr",
+"jsonlite","gtools","httr","htmltools",
+"httr","shinyTime","shinyBS","RCurl","knitr"))
 
 ```
 You may now run the shiny app with just one command in R:
@@ -44,7 +43,7 @@ You may use this app by
 | CSV Header    | Description |
 | ------------- | ------------- |
 | p             | Property name for a specific class  |
-| freq          | Count of a property |
+| freq          | Instance Count of a property |
 | Release       | Release information in date |
 | className     | Name of the selected class for quality profiling |
 | Graph         | Name of the graph |

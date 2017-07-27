@@ -12,7 +12,7 @@ output:
 
 ## Instructions
 
-The app is hosted on the website: http://datascience.polito.it/shiny/KBQ/
+The app is hosted on the website: http://130.192.85.247/shiny/KBQ/
 
 Code can be found on github: https://github.com/KBQ/KBQ
 
@@ -20,11 +20,11 @@ To run this app locally on your machine, download R or RStudio and run the follo
 
 ```
 install.packages(c("ggplot2", "dplyr", "plyr", 
-"dtplyr", "plotly","SPARQL",
-"rmarkdown","DT","readr","data.table",
-"shinyjs","shiny","shinydashboard",
-"shinythemes","stringr","jsonlite","gtools",
-"htmltools","httr","shinyTime","shinyBS"))
+"dtplyr", "plotly","SPARQL","rmarkdown",
+"DT","readr","data.table","shinyjs","shiny",
+"shinydashboard","shinythemes","stringr",
+"jsonlite","gtools","httr","htmltools",
+"httr","shinyTime","shinyBS","RCurl","knitr"))
 
 ```
 You may now run the shiny app with just one command in R:
@@ -59,7 +59,7 @@ For periodic data extraction we have created a set of REST API. We use this API 
 
 **Instructions for building scheduler**
 
-- **Input** Input a KB SPARQL endpoint url. For exmaple we present 3cixty KB SPARQL endpoint.
+- **Input** Input a KB SPARQL endpoint url. For exmaple we present DBpedia [SPARQL Endpoint](http://dbpedia.org/sparql).
 
 - **Graph** Press button *Graph* to extract available grpahs present in the KB
 
