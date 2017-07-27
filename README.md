@@ -10,7 +10,7 @@
 
 ## Instructions
 
-The app is hosted on the website: http://datascience.polito.it/shiny/KBQ/
+The app is hosted on the website: http://130.192.85.247/shiny/KBQ/
 
 To run this app locally on your machine, download R or RStudio and run the following commands once to set up the environment:
 
@@ -55,7 +55,7 @@ For periodic data extraction we have created a set of REST API. We use this API 
 
 **Instructions for building scheduler**
 
-- **Input** Input a KB SPARQL endpoint url. For exmaple we present 3cixty KB SPARQL endpoint.
+- **Input** Input a KB SPARQL endpoint url.  For exmaple we present DBpedia [SPARQL Endpoint](http://dbpedia.org/sparql).
 
 - **Graph** Press button *Graph* to extract available grpahs present in the KB
 
