@@ -1226,9 +1226,9 @@ analyzeCheck<-modalDialog(title = "Notification",
            HTML(
                   "<div class=\"list-group table-of-contents\">
                   <p class = \"label label-default\">KB growth::</p>
-                  <p>The value is 1 if the normalized distance between actual value is higher than predicted value of a class, otherwise it is 0.</p> 
+                  <p>The value is 0 if the normalized distance between actual value is higher than predicted value of a class, otherwise it is 1.</p> 
                   <p class = \"label label-default\"> Interpretation:</p> 
-                  <p>In particular, if the KB growth measure has value of 1 then the KB may have unexpected growth with unwanted entities otherwise KB remains stable.</p>
+                  <p>In particular, if the KB growth measure has value of 0 then the KB may have unexpected growth with unwanted entities otherwise KB remains stable.</p>
                   </div>
                   ")
           )

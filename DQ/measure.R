@@ -496,6 +496,8 @@ Kb_growth<-function(data){
   if(ND>=1)
     stab=0
   
+  print(paste0("Stab=",stab,"ND=",ND))
+  
   return(stab)
 }
 

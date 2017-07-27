@@ -37,7 +37,7 @@ tabPanel("-Collect-",icon = icon("cog", lib = "glyphicon"),
                          div(class="panel-heading","Collect Snapshots")
                      ),
                      
-                     textInput("txtEndpoint_snapshots", "SPARQL Endpoint:", "http://kb.3cixty.com/sparql"),
+                     textInput("txtEndpoint_snapshots", "SPARQL Endpoint:", "http://dbpedia.org/sparql"),
                      bsTooltip("txtEndpoint_snapshots", "SPARQL Endpoints URL for a Knowledge Base",
                                "right", options = list(container = "body")),
                      tags$hr(),
