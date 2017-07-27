@@ -1142,7 +1142,7 @@ analyzeCheck<-modalDialog(title = "Notification",
                     
        )
        ),
-       infoBoxOutput("completenessSummaryBoxModel"),
+       # infoBoxOutput("completenessSummaryBoxModel"),
        column(width = 4,
               HTML(
                 "
