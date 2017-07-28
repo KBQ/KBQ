@@ -50,7 +50,7 @@ You may use this app by
 | count         | Entity count of the class |
 
 
-For periodic data extraction we have created a set of REST API. We use this API to create scheduler in the hosting server based on the selected class. Details API documentation presented in the github: https://github.com/rifat963/KbDataObservetory
+For periodic data extraction we have created a set of REST API. We use this API to create scheduler in the hosting server based on the selected class. Details API documentation presented in the github: https://github.com/rifat963/KbDataObservatory
 
 **Instructions for building scheduler**
 
