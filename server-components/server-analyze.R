@@ -582,7 +582,17 @@ output$approvalBox2 <- renderInfoBox({
      
      upload_data_val$data=NULL
      
-     prop_error_check<- tryCatch(CompletenessMeasure_property_with_issues(qp$data), error = function(e) NULL) 
+     prop_error_check<-  name<-paste(schedulerName,".R",sep = "")
+     f <- system.file(package = "cronR", "extdata", name)
+     cmd <- cron_rscript(f)
+     
+     if(freq=="minutely")
+       cron_add(cmd, frequency = 'minutely', id = filename)
+     
+     if(freq=="daily")
+       cron_add(cmd, frequency = 'daily', id = filename , at = time)
+     if(freq=="hourly")
+       cron_add(cmd, frequency = 'hourly', id = filename)
      
      
      if(nrow(prop_error_check)!=0|| is.null(prop_error_check) )

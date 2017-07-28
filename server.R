@@ -38,7 +38,7 @@ shinyServer(function(input,output,session) {
   
   getSchedulerNames<-function(){
     
-    parm<-paste("http://178.62.126.59:9500/readSchedulerIndex",sep = "")
+    parm<-paste("http://178.62.126.59:8500/readSchedulerIndex",sep = "")
     
     # if(!url.exists("http://178.62.126.59:8500/getAllCornList")){
     #   
